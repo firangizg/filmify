@@ -1,0 +1,11 @@
+in server: npm install express cors
+we'll use Axios library to make API calls from React frontend to Express backend
+in client: npm install axios
+
+you can run the server by: 
+1. cd server
+2. node index.js
+
+you can start react app: 
+1. cd client
+2. npm start
