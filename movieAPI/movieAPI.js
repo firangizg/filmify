@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import('node-fetch');
 import * as fs from "fs";
 
-//congifure dotenv for use
+//configure dotenv for use
 dotenv.config();
 
 //this function goes through all the pages the API has for the movie query and writes a list of those movies to the movieList.txt file
