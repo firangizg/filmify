@@ -2,6 +2,7 @@
 import * as dotenv from "dotenv";
 import('node-fetch');
 import * as fs from "fs";
+import fetch from "node-fetch";
 
 //configure dotenv for use
 dotenv.config();
@@ -24,8 +25,6 @@ async function getPages() {
     };
     //start at the first page
     let page = 1;
-    // creates empty array where the movie objects will be stored
-    let movies = [];
     //counts what movie the program is on
     let counter = 0;
     do {
@@ -39,10 +38,13 @@ async function getPages() {
                 const { title, genre_ids, id, original_language, original_title,
                 overview, popularity, poster_path, release_date, vote_average,
                 vote_count} = movie;
-                //add the movie to the array
-                movies.push({title, genre_ids, id, original_language, original_title,
-                    overview, popularity, poster_path, release_date, vote_average,
-                    vote_count});
+
+                //outputting movie data to movieList.txt
+                fs.appendFileSync('movieList.txt', JSON.stringify({title, genre_ids, id, original_language, original_title,
+                        overview, popularity, poster_path, release_date, vote_average,
+                        vote_count}, null, 4));
+                fs.appendFileSync('movieList.txt', "\n");
+
                 //write to console what movie the program is on
                 counter++;
                 console.log(`writing movie #${counter}`)
@@ -55,11 +57,6 @@ async function getPages() {
         }
         // keep running until there's no next page -- tMDB only allows 500 pages
     } while (page <= 500);
-    // for each movie in the array of movies, stringify the movie and append it to the movieList.txt file
-    movies.map((movie) => {
-        fs.appendFileSync('movieList.txt', JSON.stringify(movie, null, 4));
-        fs.appendFileSync('movieList.txt', "\n");
-    });
 }
 
 getPages();
