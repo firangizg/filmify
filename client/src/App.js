@@ -1,5 +1,5 @@
 import './App.css';
-import Stats from './stats/Stats';
+import Stats from './components/Stats';
 
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -10,13 +10,13 @@ const App = () => {
   return (
     <div className="App">
       <Stats />
+      <Router>
+        <Routes>
+          <Route path="/logged_in" element={<LoggedIn />} />
+          <Route path="/" element={<LoginButton />} />
+        </Routes>
+      </Router>
     </div>
-    <Router>
-      <Routes>
-        <Route path="/logged_in" element={<LoggedIn />} />
-        <Route path="/" element={<LoginButton />} />
-      </Routes>
-    </Router>
   );
 };
 
