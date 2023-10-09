@@ -1,0 +1,100 @@
+{
+  "tracks": [{
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }, {
+    "track_name": "Enchanted",
+    "artist_name": "Taylor Swift"
+  }],
+  "artists": [{
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }, {
+    "artist_name": "Taylor Swift"
+  }],
+  "genres": [{
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }, {
+    "genre": "Pop"
+  }],
+  "characteristics": [{
+    "characteristic_name": "Popularity Score",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Average Track Age",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Tempo",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Happiness",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Danceability",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Energy",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Acousticness",
+    "characteristic_score": "8"
+  }, {
+    "characteristic_name": "Speechiness",
+    "characteristic_score": "8"
+  }]
+}

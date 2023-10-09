@@ -1,38 +1,112 @@
-.App {
-  text-align: center;
+/* COLORS */
+:root {
+  --off-black: #191414;
+  --off-white: #F5FAF7;
+  --green: #1DB954;
+  --grey: #404040
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* FONTS */
+h1 {
+  font: 5rem Inter;
+  color: var(--off-white);
+}
+h2 {
+  font: bold 2.5rem Inter;
+  color: var(--off-white);
+}
+h3 {
+  font: 2rem Inter;
+  color: var(--off-white);
+}
+h4 {
+  font: bold 1.2rem Inter;
+  color: var(--off-white);
+  margin: 0;
+}
+p {
+  font: 1.2rem Inter;
+  color: var(--off-white);
+  margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* REM */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+@media only screen and (min-width: 240px) {
+  html {
+    font-size: 8px;
+  }
+}
+@media only screen and (min-width: 720px) {
+  html {
+    font-size: 10px;
+  }
+}
+@media only screen and (min-width: 960px) {
+  html {
+    font-size: 12px;
+  }
+}
+@media only screen and (min-width: 1240px) {
+  html {
+    font-size: 14px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.App {
   display: flex;
   flex-direction: column;
+  background-color: var(--off-black);
+  padding: 12rem 12rem;
+}
+
+/* STATS */
+.stats-container {
+  display: flex;
+  flex-direction: column;
+}
+.list-stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 30vw;
+}
+.genres-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 6rem;
+}
+.genre {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  background-color: var(--grey);
+  height: 4rem;
+  padding: 0 4rem;
+  border-radius: 5rem;
 }
-
-.App-link {
-  color: #61dafb;
+.characteristics-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 9rem;
+  margin-bottom: 6rem;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.characteristic {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 45%;
+}
+.tracks-artists-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 6rem;
+}
+.track-artist {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
 }
