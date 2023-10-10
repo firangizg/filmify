@@ -65,4 +65,64 @@ app.get('/callback', async (req, res) => {
     res.redirect(`http://localhost:3000/error`);
   }
 });
+
+// New routes for stats
+app.get('/top-tracks', fetchTopTracks);
+app.get('/top-artists', fetchTopArtists);
+app.get('/top-genres', fetchTopGenres);
+
+// Fetch Functions
+
+// Top Tracks
+async function fetchTopTracks(req, res) {
+  try {
+      const { data } = await axios.get('https://api.spotify.com/v1/me/top/tracks', {
+          headers: {
+              'Authorization': 'Bearer ' + req.query.access_token
+          }
+      });
+      res.json(data);
+  } catch (error) {
+      res.status(500).json({ error: "Failed to fetch top tracks" });
+  }
+}
+
+// Top Artists
+async function fetchTopArtists(req, res) {
+  try {
+      const { data } = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+          headers: {
+              'Authorization': 'Bearer ' + req.query.access_token
+          }
+      });
+      res.json(data);
+  } catch (error) {
+      res.status(500).json({ error: "Failed to fetch top artists" });
+  }
+}
+
+// Top Genres
+async function fetchTopGenres(req, res) {
+  try {
+      const { data } = await axios.get('https://api.spotify.com/v1/me/top/artists', {
+          headers: {
+              'Authorization': 'Bearer ' + req.query.access_token
+          }
+      });
+
+      const genreCounts = {};
+      for (let artist of data.items) {
+          for (let genre of artist.genres) {
+              genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+          }
+      }
+
+      // Sort genres by count and return top ones
+      const topGenres = Object.entries(genreCounts).sort(([,a], [,b]) => b - a).map(([genre]) => genre);
+      res.json({ topGenres });
+      
+  } catch (error) {
+      res.status(500).json({ error: "Failed to fetch top genres" });
+  }
+}
   
