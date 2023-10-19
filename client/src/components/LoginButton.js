@@ -9,7 +9,7 @@ const LoginButton = () => {
   };
   // Renders button element so that when button is clicked, loginToSpotify is called
   return (
-    <button onClick={loginToSpotify}>
+    <button className="LoginButton" onClick={loginToSpotify}>
       Login with Spotify
     </button>
   );

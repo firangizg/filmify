@@ -60,7 +60,18 @@ html {
   display: flex;
   flex-direction: column;
   background-color: var(--off-black);
-  padding: 12rem 12rem;
+  padding: 6rem 12rem; 
+  min-height: 100vh;
+  justify-content: flex-start; 
+  align-items: center;
+}
+
+.AppTitle {
+  font-family: serif;
+  font-size: 4rem;
+  color: var(--off-white);
+  margin-bottom: 2rem; 
+  text-align: center;
 }
 
 /* STATS */
@@ -109,4 +120,27 @@ html {
   display: flex;
   gap: 2rem;
   align-items: center;
+}
+
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color: var(--off-black);
+}
+
+.LoginButton {
+  padding: 2rem 4rem; 
+  border-radius: 30px; 
+  margin-top: 9rem;
+  background-color: var(--green);
+  color: var(--off-white);
+  font-size: 2rem; 
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  /* hover effect */
+  &:hover {
+    background-color: #13943B; 
+  }
 }
