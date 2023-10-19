@@ -2,18 +2,24 @@ import './App.css';
 import Stats from './components/Stats';
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes } from 'react-router-dom';
 import LoginButton from './components/LoginButton';
-import LoggedIn from './components/LoggedIn';
 
 const App = () => {
+  // Detect if user is logged in by checking the URL for the access token
+  const urlParams = new URLSearchParams(window.location.search);
+  const accessToken = urlParams.get('access_token');
+
   return (
     <div className="App">
-      <Stats />
+      {accessToken ? <Stats /> : (
+        <>
+          <h1 className="AppTitle">Filmify</h1>
+          <LoginButton />
+        </>
+      )}
       <Router>
         <Routes>
-          <Route path="/logged_in" element={<LoggedIn />} />
-          <Route path="/" element={<LoginButton />} />
         </Routes>
       </Router>
     </div>

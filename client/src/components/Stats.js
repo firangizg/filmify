@@ -24,14 +24,16 @@ class Stats extends Component {
   render() {
     const { accessToken } = this.state;
 
+    if (!accessToken) return null; // Don't render anything if no accessToken
+
     return (
       <div className="stats-container" id="stats">
         <h2>Statistics</h2>
-        {accessToken ? <Genres accessToken={accessToken} /> : <div>Loading genres...</div>}
-        {accessToken ? <Characteristics accessToken={accessToken} /> : <div>Loading characteristics...</div>}
+        <Genres accessToken={accessToken} />
+        <Characteristics accessToken={accessToken} />
         <div className="list-stats-container">
-        {accessToken ? <Tracks accessToken={accessToken} /> : <div>Loading tracks...</div>}
-        {accessToken ? <Artists accessToken={accessToken} /> : <div>Loading artists...</div>}
+          <Tracks accessToken={accessToken} />
+          <Artists accessToken={accessToken} />
         </div>
       </div>
     );
