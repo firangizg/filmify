@@ -67,7 +67,7 @@ html {
 }
 
 .AppTitle {
-  font: serif;
+  font-family: serif;
   font-size: 4rem;
   color: var(--off-white);
   margin-bottom: 2rem; 

@@ -28,7 +28,9 @@ class Artists extends Component {
         <div className="tracks-artists-container">
           {artists.map((artist) => (
             <div className="track-artist" key={artist.id}>
-              <img src={artist.images[0] ? artist.images[0].url : './test_artist.png'} alt={artist.name}></img>
+              {artist.images[0] && (
+                <img src={artist.images[0].url} alt={artist.name} />
+              )}
               <h4>{artist.name}</h4>
             </div>
           ))}
