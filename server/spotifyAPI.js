@@ -1,5 +1,6 @@
 // Import libraries express.js for web server, axios for HTTP requests, dotenv for environment variables
 const express = require('express');
+const cors = require('cors');
 const axios = require('axios');
 const dotenv = require('dotenv');
 
@@ -7,13 +8,19 @@ const dotenv = require('dotenv');
 dotenv.config();
 // Initialize Express app
 const app = express();
+app.use(cors());
 // Use the port from env variables or use 3001 as default
 const PORT = process.env.PORT || 3001;
+
+app.use(cors({
+  origin: 'http://localhost:3000'  // your react app's address
+}));
 
 // Route handler for GET requests to /login
 app.get('/login', (req, res) => {
   // define spotify scopes we need access to
-  const scopes = 'user-library-read user-read-recently-played';
+  const scopes = 'user-library-read user-read-recently-played user-top-read';
+
   // redirect user to spotify authorization
   res.redirect('https://accounts.spotify.com/authorize' +
     '?response_type=code' +
@@ -83,8 +90,9 @@ async function fetchTopTracks(req, res) {
       });
       res.json(data);
   } catch (error) {
-      res.status(500).json({ error: "Failed to fetch top tracks" });
-  }
+    console.error('Error details:', error.response ? error.response.data : error.message);
+    res.status(500).json({ error: "Failed to fetch top tracks" });
+  } 
 }
 
 // Top Artists
@@ -119,7 +127,7 @@ async function fetchTopGenres(req, res) {
 
       // Sort genres by count and return top ones
       const topGenres = Object.entries(genreCounts).sort(([,a], [,b]) => b - a).map(([genre]) => genre);
-      res.json({ topGenres });
+      res.json({genres: topGenres});
       
   } catch (error) {
       res.status(500).json({ error: "Failed to fetch top genres" });
