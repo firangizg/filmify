@@ -28,7 +28,7 @@ class Stats extends Component {
       <div className="stats-container" id="stats">
         <h2>Statistics</h2>
         {accessToken ? <Genres accessToken={accessToken} /> : <div>Loading genres...</div>}
-        <Characteristics />
+        {accessToken ? <Characteristics accessToken={accessToken} /> : <div>Loading characteristics...</div>}
         <div className="list-stats-container">
         {accessToken ? <Tracks accessToken={accessToken} /> : <div>Loading tracks...</div>}
         {accessToken ? <Artists accessToken={accessToken} /> : <div>Loading artists...</div>}
