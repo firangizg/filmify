@@ -127,7 +127,7 @@ async function fetchTopGenres(req, res) {
 
       // Sort genres by count and return top ones
       const topGenres = Object.entries(genreCounts).sort(([,a], [,b]) => b - a).map(([genre]) => genre);
-      res.json({genres: topGenres});
+      res.json({ genres: topGenres });
       
   } catch (error) {
       res.status(500).json({ error: "Failed to fetch top genres" });

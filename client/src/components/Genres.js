@@ -15,8 +15,8 @@ class Genres extends Component {
   fetchTopGenres = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/top-genres?access_token=${this.props.accessToken}`);
-      if (response.data && response.data.topGenres) {
-        this.setState({ genres: response.data.topGenres });
+      if (response.data && response.data.genres) {
+        this.setState({ genres: response.data.genres });
       }
     } catch (error) {
       console.error('Error fetching top genres:', error);
