@@ -13,6 +13,7 @@ const App = () => {
 
   return (
     <div className="App">
+        {/*if user is logged in show the final page*/}
       {accessToken ? (
           <>
               <h1 className="AppTitle">Filmify</h1>
@@ -21,6 +22,7 @@ const App = () => {
           </>)
           : (
         <>
+            {/* otherwise have the user log in*/}
           <h1 className="AppTitle">Filmify</h1>
           <LoginButton />
         </>
