@@ -1,5 +1,6 @@
 import './App.css';
 import Stats from './components/Stats';
+import Movies from './components/Movies'
 
 import React from 'react';
 import { BrowserRouter as Router, Routes } from 'react-router-dom';
@@ -12,8 +13,16 @@ const App = () => {
 
   return (
     <div className="App">
-      {accessToken ? <Stats /> : (
+        {/*if user is logged in show the final page*/}
+      {accessToken ? (
+          <>
+              <h1 className="AppTitle">Filmify</h1>
+              <Movies />
+              <Stats />
+          </>)
+          : (
         <>
+            {/* otherwise have the user log in*/}
           <h1 className="AppTitle">Filmify</h1>
           <LoginButton />
         </>

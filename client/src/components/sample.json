@@ -96,5 +96,23 @@
   }, {
     "characteristic_name": "Speechiness",
     "characteristic_score": "8"
+  }],
+  "movies": [{
+    "movie_title": "Everything Everywhere All at Once",
+    "movie_poster":"https://image.tmdb.org/t/p/original/rKvCys0fMIIi1X9rmJBxTPLAtoU.jpg",
+    "recommendation_reasoning": "because your top track is Enchanted by Taylor Swift"
+  }, {
+    "movie_title": "Past Lives",
+    "movie_poster":"https://image.tmdb.org/t/p/original/rzO71VFu7CpJMfF5TQNMj0d1lSV.jpg",
+    "recommendation_reasoning": "because your music has high acousticness and low energy"
+  },
+  {
+    "movie_title": "Interstellar",
+    "movie_poster":"https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+    "recommendation_reasoning": "because your top genre is Alternative"
+  }, {
+    "movie_title": "Call Me By Your Name",
+    "movie_poster":"https://image.tmdb.org/t/p/original/mZ4gBdfkhP9tvLH1DO4m4HYtiyi.jpg",
+    "recommendation_reasoning": "because your top artist is Taylor Swift"
   }]
 }

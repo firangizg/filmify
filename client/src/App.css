@@ -60,17 +60,9 @@ html {
   display: flex;
   flex-direction: column;
   background-color: var(--off-black);
-  padding: 6rem 12rem; 
-  min-height: 100vh;
-  justify-content: flex-start; 
-  align-items: center;
+  padding: 12rem 12rem;
 }
-
 .AppTitle {
-  font-family: serif;
-  font-size: 4rem;
-  color: var(--off-white);
-  margin-bottom: 2rem; 
   text-align: center;
 }
 
@@ -122,6 +114,20 @@ html {
   align-items: center;
 }
 
+/* MOVIES */
+.movie-poster {
+  width: 100%;
+}
+.movie-recommendation-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 6rem;
+}
+.movie-recommendation{
+  width: 100%;
+}
+
 body, html {
   height: 100%;
   margin: 0;
@@ -129,18 +135,18 @@ body, html {
 }
 
 .LoginButton {
-  padding: 2rem 4rem; 
-  border-radius: 30px; 
+  padding: 2rem 4rem;
+  border-radius: 30px;
   margin-top: 9rem;
   background-color: var(--green);
   color: var(--off-white);
-  font-size: 2rem; 
+  font-size: 2rem;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
 
   /* hover effect */
   &:hover {
-    background-color: #13943B; 
+    background-color: #13943B;
   }
 }
