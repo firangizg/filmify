@@ -1,4 +1,5 @@
 import './App.css';
+import Movies from './components/Movies'
 import Stats from './components/Stats';
 
 import React from 'react';
@@ -9,6 +10,9 @@ import LoggedIn from './components/LoggedIn';
 const App = () => {
   return (
     <div className="App">
+    {/* TODO: make App Title/header its own component  */}
+    <h1 className="AppTitle">Filmify</h1>
+      <Movies />
       <Stats />
       <Router>
         <Routes>

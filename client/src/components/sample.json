@@ -96,5 +96,19 @@
   }, {
     "characteristic_name": "Speechiness",
     "characteristic_score": "8"
+  }],
+  "movies": [{
+    "movie_title": "Everything Everywhere All at Once",
+    "recommendation_reasoning": "because your top track is Enchanted by Taylor Swift"
+  }, {
+    "movie_title": "Everything Everywhere All at Once",
+    "recommendation_reasoning": "because your top track is Enchanted by Taylor Swift"
+  },
+  {
+    "movie_title": "Everything Everywhere All at Once",
+    "recommendation_reasoning": "because your top track is Enchanted by Taylor Swift"
+  }, {
+    "movie_title": "Everything Everywhere All at Once",
+    "recommendation_reasoning": "because your top track is Enchanted by Taylor Swift"
   }]
 }
