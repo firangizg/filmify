@@ -1,5 +1,6 @@
 import './App.css';
 import Stats from './components/Stats';
+import Movies from './components/Movies'
 
 import React from 'react';
 import { BrowserRouter as Router, Routes } from 'react-router-dom';
@@ -12,7 +13,13 @@ const App = () => {
 
   return (
     <div className="App">
-      {accessToken ? <Stats /> : (
+      {accessToken ? (
+          <>
+              <h1 className="AppTitle">Filmify</h1>
+              <Movies />
+              <Stats />
+          </>)
+          : (
         <>
           <h1 className="AppTitle">Filmify</h1>
           <LoginButton />

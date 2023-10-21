@@ -62,6 +62,9 @@ html {
   background-color: var(--off-black);
   padding: 12rem 12rem;
 }
+.AppTitle {
+  text-align: center;
+}
 
 /* STATS */
 .stats-container {
@@ -113,7 +116,6 @@ html {
 
 /* MOVIES */
 .movie-poster {
-  height: 20rem;
   width: 100%;
 }
 .movie-recommendation-container{
