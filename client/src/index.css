@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.track-artist img {
+  width: 100px;  
+  height: 100px; 
+  object-fit: cover;
+  border-radius: 50%; 
+}
