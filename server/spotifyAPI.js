@@ -1,3 +1,5 @@
+// This file is the backend for spotify api. It authorizes users and fetches the statistics
+
 // Import libraries express.js for web server, axios for HTTP requests, dotenv for environment variables
 const express = require('express');
 const cors = require('cors');
