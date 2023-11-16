@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Load env variables
 dotenv.config();
@@ -15,7 +16,7 @@ app.use(cors());
 const PORT = process.env.PORT || 3001;
 
 app.use(cors({
-  origin: 'http://localhost:3000'  // your react app's address
+  origin: 'http://filmify.azurewebsites.net/'  // your react app's address
 }));
 
 // Route handler for GET requests to /login
@@ -31,6 +32,12 @@ app.get('/login', (req, res) => {
     '&redirect_uri=' + encodeURIComponent('http://localhost:3001/callback')
   );
 });
+
+// production script
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+}
 
 // Start Express.js server 
 app.listen(PORT, () => {

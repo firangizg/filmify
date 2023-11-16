@@ -4,8 +4,7 @@
   "description": "",
   "main": "spotifyAPI.js.",
   "scripts": {
-    "start": "node spotifyAPI.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node spotifyAPI.js"
   },
   "keywords": [],
   "author": "",

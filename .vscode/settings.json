@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/368abb9a-6033-4f73-ba82-01f216c125a6/resourceGroups/filmifyRGP/providers/Microsoft.Web/sites/Filmify",
+    "appService.deploySubpath": "."
+}
