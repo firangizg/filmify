@@ -10,7 +10,7 @@ class Artists extends Component {
     const { accessToken } = this.props;
     if (accessToken) {
       try {
-        const response = await fetch(`http://localhost:3001/top-artists?access_token=${accessToken}`);
+        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/top-artists?access_token=${accessToken}`);
         const data = await response.json();
         this.setState({ artists: data.items });
       } catch (error) {
