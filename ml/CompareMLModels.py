@@ -11,6 +11,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.preprocessing import LabelEncoder
 
 #input file
 url = "test_data.csv"
@@ -27,9 +28,16 @@ dataset_noD = dataset.drop(columns=['song', 'artist', 'duration', 'key'])
 #dataset using duration
 dataset_D = dataset.drop(columns=['song', 'artist', 'key'])
 
-#storing the values from the dataset into a matrix, specifying with/without duration
+#dataset using duration & key
+dataset_DK = dataset.drop(columns=['song', 'artist'])
+#mapping the 'key' column to integer values
+le = LabelEncoder()
+dataset_DK['key'] = le.fit_transform(dataset_DK['key'])
+
+#storing the values from the dataset into a matrix, specifying with/without duration/key
 array_noD = dataset_noD.values
 array_D = dataset_D.values
+array_DK = dataset_DK.values
 
 #storing the features and classes in separate arrays
 X_noD = array_noD[:, 0:9] #stores song features
@@ -39,6 +47,11 @@ y_noD = array_noD[:, 9] #stores the class of the song (movie genre)
 #storing the features and classes in separate arrays
 X_D = array_D[:, 0:10] #stores song features
 y_D = array_D[:, 10] #stores the class of the song (movie genre)
+
+""" below code is if you're using duration & key """
+#storing the features and classes in separate arrays
+X_DK = array_DK[:, 0:11] #stores song features
+y_DK = array_DK[:, 11] #stores the class of the song (movie genre)
 
 #need to convert duration to integer value
 for j in range(X_D.shape[0]):
@@ -120,7 +133,7 @@ second_iter.append(('LDA', LinearDiscriminantAnalysis(), "second_iter/lda_predic
 """the following code runs our models"""
 for name, model, file_pred, file_metrics, X, y in first_iter: #looping through our model array
     classifier(name, model, file_pred, file_metrics, X, y) #calling the template classifier function to run all models
-
+#
 for name, model, file_pred, file_metrics, X, y in second_iter: #looping through our model array
     classifier(name, model, file_pred, file_metrics, X, y) #calling the template classifier function to run all models
 
