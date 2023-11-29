@@ -13,6 +13,7 @@ class Genres extends Component {
   }
 
   fetchTopGenres = async () => {
+    // Fetch data from your backend
     try {
       const response = await axios.get(`http://localhost:3001/top-genres?access_token=${this.props.accessToken}`);
       if (response.data && response.data.genres) {
@@ -24,6 +25,7 @@ class Genres extends Component {
     }
   };
 
+  // Component for displaying top genres
   render() {
     const { genres, error } = this.state;
 
@@ -31,6 +33,7 @@ class Genres extends Component {
       <div id="Top Genres">
         <h3>Top Genres</h3>
         <div className="genres-container">
+          {/* Display each of the top genres */}
           {genres.map((genre, index) => (
             <div key={index} className="genre">
               <p>{genre}</p>

@@ -10,6 +10,7 @@ class Tracks extends Component {
     const { accessToken } = this.props;
     if (accessToken) {
       try {
+        // Fetch data from your backend
         const response = await fetch(`http://localhost:3001/top-tracks?access_token=${accessToken}`);
         const data = await response.json();
         this.setState({ tracks: data.items });
@@ -19,6 +20,7 @@ class Tracks extends Component {
     }
   }
 
+  // Component for displaying all top tracks
   render() {
     const { tracks } = this.state;
 
@@ -26,8 +28,9 @@ class Tracks extends Component {
       <div id="Top Tracks">
         <h3>Top Tracks</h3>
         <div className="tracks-artists-container">
+          {/* For each of the top tracks, display the track artwork, title, and artist */}
           {tracks.map((item) => (
-            <div className="track-artist" key={item.id}>
+            <div className="track" key={item.id}>
               <img src={item.album.images[0].url} alt={item.name}></img>
               <div>
                 <h4>{item.name}</h4>

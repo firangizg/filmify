@@ -21,12 +21,14 @@ class Stats extends Component {
     }
   }
 
+  // Component for displaying all listening information
   render() {
     const { accessToken } = this.state;
 
     if (!accessToken) return null; // Don't render anything if no accessToken
 
     return (
+      // Display all listening information
       <div className="stats-container" id="stats">
         <h2>Statistics</h2>
         <Genres accessToken={accessToken} />

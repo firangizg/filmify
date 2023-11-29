@@ -9,6 +9,7 @@ class Artists extends Component {
   async componentDidMount() {
     const { accessToken } = this.props;
     if (accessToken) {
+      // Fetch data from your backend
       try {
         const response = await fetch(`http://localhost:3001/top-artists?access_token=${accessToken}`);
         const data = await response.json();
@@ -19,15 +20,16 @@ class Artists extends Component {
     }
   }
 
+  // Component for displaying all top artists
   render() {
     const { artists } = this.state;
-
     return (
       <div id="Top Artists">
         <h3>Top Artists</h3>
         <div className="tracks-artists-container">
+          {/* For each top artist, display the artist's image and name */}
           {artists.map((artist) => (
-            <div className="track-artist" key={artist.id}>
+            <div className="artist" key={artist.id}>
               {artist.images[0] && (
                 <img src={artist.images[0].url} alt={artist.name} />
               )}

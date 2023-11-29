@@ -26,11 +26,13 @@ class Characteristics extends Component {
     }
   }
 
+  // Component for displaying all music characteristics
   render() {
     return (
       <div id="Characteristics">
         <h3>Characteristics</h3>
         <div className="characteristics-container">
+          {/* For each characteristic, list the characteristic and its corresponding value */}
           {this.state.characteristics.map((item) => (
             <div className="characteristic" key={item.characteristic_name}>
               <h4>{item.characteristic_name}</h4>

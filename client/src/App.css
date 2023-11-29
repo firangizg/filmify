@@ -1,7 +1,7 @@
 /* COLORS */
 :root {
   --off-black: #191414;
-  --off-white: #F5FAF7;
+  --off-white: #FFFFFF;
   --green: #1DB954;
   --grey: #404040
 }
@@ -108,7 +108,12 @@ html {
   gap: 2rem;
   margin-bottom: 6rem;
 }
-.track-artist {
+.track {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.artist {
   display: flex;
   gap: 2rem;
   align-items: center;

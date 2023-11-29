@@ -12,7 +12,12 @@ code {
     monospace;
 }
 
-.track-artist img {
+.track img {
+  width: 100px;  
+  height: 100px; 
+  object-fit: cover;
+}
+.artist img {
   width: 100px;  
   height: 100px; 
   object-fit: cover;
