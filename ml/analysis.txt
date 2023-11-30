@@ -1,0 +1,20 @@
+For our preliminary ML experimentation, we ran 8 different models provided by scikit learn and stored each model's confusion matrix and accuracy scores. Below are the accuracy scores for each model & iteration the last time it was run.
+(Note, in the first iteration, we used the features acousticness, danceability, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence, and genre. In the second iteration, we added duration to our input features. Thus, we used the features acousticness, danceability, duration, energy, instrumentalness, liveness, loudness, speechiness, tempo, valence, and genre. In the third iteration, we added duration and key to our input features. Thus, we used the features acousticness, danceability, duration, energy, instrumentalness, key, liveness, loudness, speechiness, tempo, valence, and genre.)
+
+//FORMAT: Model: (first iteration accuracy, second iteration accuracy, third iteration accuracy)
+Gaussian Naive Bayesian: (0.141, 0.141, 0.127)
+k-Nearest Neighbors: (0.127, 0.113, 0.113)
+Linear Discriminant Analysis: (0.169, 0.169, 0.155)
+Support Vector Machine: (0.141, 0.141, 0.169)
+Decision Tree: (0.141, 0.127, 0.141)
+Random Forest: (0.141, 0.169, 0.169)
+Extra Trees: (0.127, 0.155, 0.169)
+Neural Network: (0.183, 0.155, 0.113)
+
+Looking at these results, we concluded that we have 2 options moving forward with ML producing movie recommendations.
+Option 1 will be combining results from different iterations/using different characteristics in our input data, producing 2 different genre results for a given ml model. For example, using LDA, one will be running LDA on the characteristics we considered "primary", and one will be running LDA on the same songs with its "secondary" characteristics. We would then take the 2 genres produced by these runs and query the database for movies that are listed under both of these genres.
+
+The second option will also query the database for 2 different genres, but will use the same characteristics for 2 runs in a volatile ml model. For example, since a neural network produces different predictions each time it is run, we can run the same data through a neural network twice, and then query the database based on the 2 different genres that it produced.
+
+As we continue to better understand these models and how to manipulate our data, we can make more refined decisions specific to our goals.
+
