@@ -28,7 +28,7 @@ third_iter_path = "third_iter"
 first_path_exists = os.path.exists(first_iter_path)
 second_path_exists = os.path.exists(second_iter_path)
 third_path_exists = os.path.exists(third_iter_path)
-#creating directories if
+#creating directories if they're not already created
 if not first_path_exists:
    os.mkdir(first_iter_path)
 if not second_path_exists:
