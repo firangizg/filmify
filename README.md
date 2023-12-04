@@ -21,6 +21,15 @@ API_KEY can be obtained from https://www.themoviedb.org/settings/api
 4. Run the application with `npm start`
 5. Open http://localhost:3000 to view it in the browser.
 
+## ENV variables
+Currently, in client folder, there is .env.development and .env.production files. Both contain REACT_APP_API_BASE_URL. 
+
+In server, .env contains, in addition to the api credentials, the following variables: 
+
+CLIENT_BASE_URL is set to http://localhost:3000
+SERVER_BASE_URL is set to http://localhost:3001 
+
+We also have .env.production that sets those variables to https://filmify.azurewebsites.net/. 
 ## Technologies used
 - React
 - Node.js
