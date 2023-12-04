@@ -59,4 +59,4 @@ jobs:
           app-name: 'filmify'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AF0C75DEC0534A81AECC464FB60EF3FA }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_03FC8AE1461E4E9ABD3A39A3CDF024B2 }}
