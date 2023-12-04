@@ -5,7 +5,7 @@ const LoginButton = () => {
   // Function to redirect user browser to /login route
   // Server handles Spotify login
   const loginToSpotify = async () => {
-    window.location.href = 'http://localhost:3001/login';
+    window.location.href = `${process.env.REACT_APP_API_BASE_URL}/login`;
   };
   // Renders button element so that when button is clicked, loginToSpotify is called
   return (

@@ -14,7 +14,7 @@ class Genres extends Component {
 
   fetchTopGenres = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/top-genres?access_token=${this.props.accessToken}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/top-genres?access_token=${this.props.accessToken}`);
       if (response.data && response.data.genres) {
         this.setState({ genres: response.data.genres });
       }
