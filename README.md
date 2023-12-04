@@ -3,7 +3,10 @@
 Filmify is a web application that suggests users movies to watch based on their recent Spotify listening history, gathering data from user's top genres, artists and tracks. 
 
 ## Accessing the application
-The app is currently being hosted on Microsoft Azure at [filmify.azurewebsites.net](https://filmify.azurewebsites.net/) however it needs further refinement to be accessed for production. 
+
+The frontend of the application is currently hosted  [here](https://mango-rock-0c2ad6d0f.4.azurestaticapps.net/)
+
+The backend is currently being hosted on Microsoft Azure at [filmify.azurewebsites.net](https://filmify.azurewebsites.net/) however it needs further refinement to be accessed for production. 
 
 ## Running the application locally
 1. Clone the repository
