@@ -1,5 +1,8 @@
+// Service to fetch movies from tMDB API
 import fetch from 'node-fetch';
 import config from '../config.js';
+
+// TODO: use axios instead of fetch
 
 const movieService = {
     fetchMovies: async () => {
@@ -7,6 +10,7 @@ const movieService = {
         const movies = [];
         do {
             try {
+                // Get the movies from the api
                 const response = await fetch(`${config.movieApiUrl}&page=${page}`, {
                     method: 'GET',
                     headers: {
@@ -14,7 +18,9 @@ const movieService = {
                         Authorization: `Bearer ${config.movieApiKey}`
                     }
                 });
+                // Parse the response
                 const data = await response.json();
+                // Add the movies to the array
                 movies.push(...data.results);
                 page++;
             } catch (error) {

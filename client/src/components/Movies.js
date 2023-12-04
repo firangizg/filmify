@@ -1,3 +1,4 @@
+// This file contains the code for the Recommendations component.
 import React, { Component } from 'react';
 import '../App.css';
 

@@ -1,2 +1,4 @@
 Add comments everywhere needed
 Need to add logic to handle token expiration
+Look into npm warnings
+Get rid of redundancy btw spotify controller and service
