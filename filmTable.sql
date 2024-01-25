@@ -11,7 +11,7 @@
 	vote average doesn't have to be a whole number so it is decimal type
 	vote_count can be a whole number
 */
-create table films (title text, genre_ids integer[], id int,
+create table films (title text, genre_ids integer[], id int UNIQUE,
 original_language text, original_title text, overview text, popularity
 decimal, poster_path text, release_date DATE, vote_average decimal,
 vote_count decimal);

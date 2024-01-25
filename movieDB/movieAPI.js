@@ -67,26 +67,37 @@ async function getPages() {
                 counter++;
                 console.log(`writing movie #${counter}`)
             });
+
+            if (page % 33 === 0)
+            {
+                console.log("Adding some movies to database");
+                //turn the array into a string
+                movies = JSON.stringify(movies)
+
+                //use json_populate_recordset to add whole array into the database
+                // it automatically matches the key value pairs in the json to the proper columns in the database
+                const query = pgp.as.format(`INSERT INTO films SELECT * FROM json_populate_recordset(null::films,'${movies}') 
+                                               ON CONFLICT (id) DO UPDATE SET popularity = EXCLUDED.popularity, 
+                                               vote_average = EXCLUDED.vote_average, vote_count = EXCLUDED.vote_count`);
+
+                // create a Pool for the database connection and run the query
+                const pool = new Pool(credentials);
+                const now = await pool.query(query);
+                await pool.end();
+                //clear array
+                movies = [];
+            }
+            console.log (`finished page ${page}`);
+
             // increment the page with 1 on each loop
             page++;
         } catch (err) {
             //print that something went wrong
             console.error(`Oops, something is wrong ${err}`);
+            break;
         }
-        // keep running until there's no next page -- tMDB only allows 500 pages
-    } while (page <= 500);
-
-    //turn the array into a string
-    movies = JSON.stringify(movies)
-
-    //use json_populate_recordset to add whole array into the database
-    // it automatically matches the key value pairs in the json to the proper columns in the database
-    const query = pgp.as.format(`INSERT INTO films SELECT * FROM json_populate_recordset(null::films,'${movies}')`);
-
-    // create a Pool for the database connection and run the query
-    const pool = new Pool(credentials);
-    const now = await pool.query(query);
-    await pool.end();
+        // keep running until there's no next page -- tMDB only allows 99 pages
+    } while (page <= 99);
 }
 
 getPages();
