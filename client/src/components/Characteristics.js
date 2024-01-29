@@ -1,17 +1,19 @@
+// This component displays the characteristics of the song.
 import React, { Component } from 'react';
 import '../App.css';
 
 class Characteristics extends Component {
+  // Initialize the state
   state = {
     characteristics: []
   };
-
+  // Fetch the characteristics from the backend
   async componentDidMount() {
     const { accessToken } = this.props;
 
-    // Fetch data from your backend
+    // Fetch the characteristics
     try {
-      const response = await fetch(`http://localhost:3001/track-features?access_token=${accessToken}`);
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/track-features?access_token=${accessToken}`);
       const data = await response.json();
 
       // Transform the data into the required format
@@ -25,7 +27,8 @@ class Characteristics extends Component {
       console.error("Failed to fetch characteristics", error);
     }
   }
-
+  // Render the characteristics, if they exist
+  // Display the characteristic name and score
   render() {
     return (
       <div id="Characteristics">

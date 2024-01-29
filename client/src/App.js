@@ -1,3 +1,4 @@
+// This file contains the code for the main App component, including the LoginButton component.
 import './App.css';
 import Stats from './components/Stats';
 import Movies from './components/Movies'

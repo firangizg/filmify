@@ -2,9 +2,11 @@
 ## Description
 Filmify is a web application that suggests users movies to watch based on their recent Spotify listening history, gathering data from user's top genres, artists and tracks. 
 
-
 ## Accessing the application
-The app is currently being hosted on Microsoft Azure at [filmify.azurewebsites.net](https://filmify.azurewebsites.net/) however it needs further refinement to be accessed for production as the backend is not deployed yet. 
+
+The frontend of the application is currently hosted  [here](https://mango-rock-0c2ad6d0f.4.azurestaticapps.net/)
+
+The backend is currently being hosted on Microsoft Azure at [filmify.azurewebsites.net](https://filmify.azurewebsites.net/) however it needs further refinement to be accessed for production. 
 
 ## Running the application locally
 1. Clone the repository
@@ -22,6 +24,15 @@ API_KEY can be obtained from https://www.themoviedb.org/settings/api
 4. Run the application with `npm start`
 5. Open http://localhost:3000 to view it in the browser.
 
+## ENV variables
+Currently, in client folder, there is .env.development and .env.production files. Both contain REACT_APP_API_BASE_URL. 
+
+In server, .env contains, in addition to the api credentials, the following variables: 
+
+CLIENT_BASE_URL is set to http://localhost:3000
+SERVER_BASE_URL is set to http://localhost:3001 
+
+We also have .env.production that sets those variables to https://filmify.azurewebsites.net/. 
 ## Technologies used
 - React
 - Node.js
