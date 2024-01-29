@@ -1,8 +1,7 @@
 // Service to fetch movies from tMDB API
 import fetch from 'node-fetch';
 import config from '../config.js';
-
-// TODO: use axios instead of fetch
+import logger from '../logger.js';
 
 const movieService = {
     fetchMovies: async () => {
@@ -24,8 +23,8 @@ const movieService = {
                 movies.push(...data.results);
                 page++;
             } catch (error) {
-                console.error(`Error fetching movies: ${error}`);
-                break;
+                logger.error(`Error in fetchMovieData: ${error.message}`);
+                throw error;
             }
         } while (page <= 500); // tMDB limit
         return movies;

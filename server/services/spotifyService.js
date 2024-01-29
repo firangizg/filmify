@@ -2,6 +2,7 @@
 
 import SpotifyService from '../services/spotifyService';
 import config from '../config'; 
+import logger from '../logger';
 
 // Controller for handling Spotify login
 export const login = (req, res) => {
@@ -19,7 +20,7 @@ export const callback = async (req, res) => {
         const { access_token, refresh_token } = tokens;
         res.redirect(`${config.clientBaseUrl}/logged_in?access_token=${access_token}&refresh_token=${refresh_token}`);
     } catch (error) {
-        console.error('Error in Spotify callback', error);
+        logger.error('Error in Spotify callback', error);
         res.redirect('${config.clientBaseUrl}/error');
     }
 };
@@ -30,7 +31,7 @@ export const fetchTopTracks = async (req, res) => {
         const data = await SpotifyService.fetchTopTracks(req.query.access_token);
         res.json(data);
     } catch (error) {
-        console.error('Error fetching top tracks', error);
+        logger.error('Error fetching top tracks', error);
         res.status(500).json({ error: "Failed to fetch top tracks" });
     }
 };
@@ -41,7 +42,7 @@ export const fetchTopArtists = async (req, res) => {
         const data = await SpotifyService.fetchTopArtists(req.query.access_token);
         res.json(data);
     } catch (error) {
-        console.error('Error fetching top artists', error);
+        logger.error('Error fetching top artists', error);
         res.status(500).json({ error: "Failed to fetch top artists" });
     }
 };
@@ -53,7 +54,7 @@ export const fetchTopGenres = async (req, res) => {
         const topGenres = Object.entries(genreCounts).sort(([,a], [,b]) => b - a).map(([genre]) => genre);
         res.json({ genres: topGenres });
     } catch (error) {
-        console.error('Error fetching top genres', error);
+        logger.error('Error fetching top genres', error);
         res.status(500).json({ error: "Failed to fetch top genres" });
     }
 };
@@ -97,8 +98,8 @@ export const fetchTrackFeatures = async (req, res) => {
         };
         
         res.json(averages);
-    } catch (error) {
-        console.error('Error fetching track features:', error);
+    } catch(error) {
+        logger.error('Error fetching track features:', error);
         res.status(500).json({ error: "Failed to fetch track features and calculate averages" });
     }
 };
