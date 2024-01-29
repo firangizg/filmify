@@ -1,13 +1,14 @@
 {
   "name": "server",
-  "type":"module",
+  "type": "module",
   "version": "1.0.0",
   "description": "Server for handling Spotify and Movie API requests",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "start:prod": "NODE_ENV=production node server.js",
-    "start:dev": "NODE_ENV=development node server.js"
+    "start:dev": "NODE_ENV=development node server.js",
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +18,13 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "fs": "^0.0.1-security",
-    "node-fetch": "^3.2.0"
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.2.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.4"
   }
 }
