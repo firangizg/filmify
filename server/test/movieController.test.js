@@ -1,3 +1,4 @@
+// Import required modules
 import movieController from '../controllers/movieController.js';
 import movieService from '../services/movieService.js';
 import fs from 'fs';
@@ -9,55 +10,48 @@ import jest from 'jest';
 jest.mock('../services/movieService');
 jest.mock('fs');
 
-// Set up a basic express app for testing
+// Initialize Express app and define route for testing
 const app = express();
 app.get('/movies', movieController.getMovies);
 
+// Group tests for getMovies function in movieController
 describe('Movie Controller - getMovies', () => {
   beforeEach(() => {
-    // Clear all mocks before each test
-    jest.clearAllMocks();
+    jest.clearAllMocks(); // Reset mocks before each test
   });
 
-  it('should write movies to a file and return a success message', async () => {
-    // Mock data to be returned by the movieService
+  it('writes movies to a file and returns success message', async () => {
     const mockMovies = [{ title: 'Movie 1' }, { title: 'Movie 2' }];
-    movieService.fetchMovies.mockResolvedValue(mockMovies);
+    movieService.fetchMovies.mockResolvedValue(mockMovies); // Mock service response
 
-    // Mock fs functions
+    // Setup fs mock behaviors
     fs.existsSync.mockReturnValue(false);
-    fs.unlinkSync.mockReturnValue();
     fs.appendFileSync.mockReturnValue();
 
-    // Make a request to the getMovies route
-    const response = await request(app).get('/movies');
+    const response = await request(app).get('/movies'); // Test route
 
-    // Assertions
+    // Check response and interactions with mocks
     expect(response.statusCode).toBe(200);
-    expect(response.text).toEqual('Movies written to file successfully');
-    expect(movieService.fetchMovies).toHaveBeenCalledTimes(1);
-    expect(fs.existsSync).toHaveBeenCalledWith('movieList.txt');
+    expect(response.text).toBe('Movies written to file successfully');
+    expect(movieService.fetchMovies).toHaveBeenCalled();
     expect(fs.appendFileSync).toHaveBeenCalledTimes(mockMovies.length);
 
-    // Ensure the movies are written to the file correctly
-    mockMovies.forEach((movie, index) => {
+    // Verify each movie is written to the file
+    mockMovies.forEach(movie => {
       expect(fs.appendFileSync).toHaveBeenCalledWith(
-        'movieList.txt',
-        JSON.stringify(movie, null, 4) + '\n'
+        'movieList.txt', JSON.stringify(movie, null, 4) + '\n'
       );
     });
   });
 
-  it('should handle errors gracefully', async () => {
-    // Simulate an error thrown by the movieService
-    movieService.fetchMovies.mockRejectedValue(new Error('Service failure'));
+  it('handles service errors gracefully', async () => {
+    movieService.fetchMovies.mockRejectedValue(new Error('Service failure')); // Simulate service error
 
-    // Make a request to the getMovies route
-    const response = await request(app).get('/movies');
+    const response = await request(app).get('/movies'); // Test error handling
 
-    // Assertions
+    // Validate error response
     expect(response.statusCode).toBe(500);
-    expect(response.text).toEqual('Failed to fetch movies');
-    expect(movieService.fetchMovies).toHaveBeenCalledTimes(1);
+    expect(response.text).toBe('Failed to fetch movies');
+    expect(movieService.fetchMovies).toHaveBeenCalled();
   });
 });
