@@ -23,7 +23,7 @@ async function getPages() {
     /* the url to the request url which includes all the parameters we are searching against
     * we don't want any adult films or anything that is not really a movie
     * the movies should be available in English, people in the US should be able to watch them, and they should have a rating of above 4 stars */
-    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&vote_average.gte=4&watch_region=United%20States&with_runtime.gte=40&page=`;
+    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&vote_average.gte=4&vote_count.gte=100&watch_region=United%20States&with_runtime.gte=40&page=`;
     //the headers and authorization needed to make the request -- for now the API_KEY is in an env file
     const options = {
         method: 'GET',
@@ -68,7 +68,7 @@ async function getPages() {
                 console.log(`writing movie #${counter}`)
             });
 
-            if (page % 33 === 0)
+            if (page % 50 === 0)
             {
                 console.log("Adding some movies to database");
                 //turn the array into a string
@@ -97,7 +97,7 @@ async function getPages() {
             break;
         }
         // keep running until there's no next page -- tMDB only allows 99 pages
-    } while (page <= 99);
+    } while (page <= 500);
 }
 
 getPages();
