@@ -1,9 +1,11 @@
+//import the test JSON file and file writing
 import sample from './testCharacteristicInput.json' assert { type: "json" };
 import * as fs from 'fs';
 
 let output = "";
 let characteristics = "";
 
+//for each key in the file, assign the new normalized value
 Object.entries(sample).forEach(([key, value]) => {
     if(key === "speechiness") {
         if(value < 0.1) {
@@ -42,6 +44,7 @@ Object.entries(sample).forEach(([key, value]) => {
             value = 5;
         }
     }
+    //create the output for the title row
     if(key === "liveness") {
         output += key;
         characteristics += value;
@@ -51,8 +54,10 @@ Object.entries(sample).forEach(([key, value]) => {
     }
 })
 
+//add the characteristics on the new line
 output += "\n" + characteristics;
 
+//print the output to a csv file that can be fed to the ML model
 fs.writeFile('single_test_data.csv', output, err => {
     if (err) {
         console.error(err);
