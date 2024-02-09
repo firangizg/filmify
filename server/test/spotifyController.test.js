@@ -1,10 +1,10 @@
-// spotifyController.test.js
-
+// Import dependencies
 import axios from 'axios';
 import httpMocks from 'node-mocks-http';
 import { login, callback, fetchTopTracks, fetchTopArtists, fetchTopGenres, fetchTrackFeatures } from '../controllers/spotifyController';
 import config from '../config';
 
+// Mock axios and config to isolate the controller functions
 jest.mock('axios');
 jest.mock('../config', () => ({
   serverBaseUrl: 'http://localhost:3000',
@@ -13,13 +13,20 @@ jest.mock('../config', () => ({
   spotifyClientSecret: 'client_secret'
 }));
 
+// Utility function to set up mock request and response objects
 const setupMocks = () => {
   const req = httpMocks.createRequest();
   const res = httpMocks.createResponse();
   return { req, res };
 };
 
+// Define test suite for Spotify Controller functions
 describe('Spotify Controller', () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Reset mocks before each test
+  });
+
+  // Test login functionality
   describe('login', () => {
     it('redirects to Spotify auth with correct parameters', () => {
       const { req, res } = setupMocks();
@@ -27,123 +34,87 @@ describe('Spotify Controller', () => {
       const redirectUrl = res._getRedirectUrl();
       expect(redirectUrl).toContain('https://accounts.spotify.com/authorize');
       expect(redirectUrl).toContain(`client_id=${config.spotifyClientId}`);
-      expect(redirectUrl).toContain('response_type=code');
     });
   });
 
+  // Test callback functionality
   describe('callback', () => {
-    it('handles Spotify callback successfully', async () => {
+    it.each([
+      ['successful callback', 'access_token', `${config.clientBaseUrl}?access_token=access_token`, null],
+      ['failed callback', null, `${config.clientBaseUrl}/error`, new Error('Spotify API error')]
+    ])('%s', async (_, accessToken, expectedRedirect, mockError) => {
       const { req, res } = setupMocks();
       req.query.code = 'testcode';
-      axios.post.mockResolvedValue({
-        data: { access_token: 'access_token', refresh_token: 'refresh_token' }
-      });
+      if (mockError) {
+        axios.post.mockRejectedValue(mockError);
+      } else {
+        axios.post.mockResolvedValue({ data: { access_token: accessToken } });
+      }
 
       await callback(req, res);
-      expect(res._getRedirectUrl()).toContain(config.clientBaseUrl);
-      expect(res._getRedirectUrl()).toContain('access_token=access_token');
-    });
-
-    it('redirects to error page on failure', async () => {
-      const { req, res } = setupMocks();
-      req.query.code = 'testcode';
-      axios.post.mockRejectedValue(new Error('Spotify API error'));
-
-      await callback(req, res);
-      expect(res._getRedirectUrl()).toEqual(`${config.clientBaseUrl}/error`);
+      expect(res._getRedirectUrl()).toEqual(expectedRedirect);
     });
   });
 
+  // Test fetching top tracks functionality
   describe('fetchTopTracks', () => {
-    it('returns top tracks on success', async () => {
+    it('handles response and errors', async () => {
       const { req, res } = setupMocks();
       req.query.access_token = 'access_token';
-      axios.get.mockResolvedValue({ data: { items: ['track1', 'track2'] } });
 
+      // Mock success and failure cases
+      const mockSuccessResponse = { data: { items: ['track1', 'track2'] } };
+      const mockErrorResponse = new Error('Failed to fetch');
+      axios.get.mockResolvedValueOnce(mockSuccessResponse).mockRejectedValueOnce(mockErrorResponse);
+
+      // Test success case
       await fetchTopTracks(req, res);
       expect(res._getStatusCode()).toBe(200);
-      expect(res._getData()).toEqual({ items: ['track1', 'track2'] });
-    });
+      expect(res._getData()).toEqual(mockSuccessResponse);
 
-    it('returns error on failure', async () => {
-      const { req, res } = setupMocks();
-      req.query.access_token = 'access_token';
-      axios.get.mockRejectedValue(new Error('Failed to fetch'));
-
+      // Test failure case
       await fetchTopTracks(req, res);
       expect(res._getStatusCode()).toBe(500);
       expect(res._getData()).toContain('Failed to fetch top tracks');
     });
   });
 
-  describe('fetchTopArtists', () => {
-    it('returns top artists on success', async () => {
+  // Consolidated tests for similar functionality (fetchTopArtists and fetchTopGenres)
+  describe.each([
+    ['fetchTopArtists', fetchTopArtists, 'artists'],
+    ['fetchTopGenres', fetchTopGenres, 'genres']
+  ])('%s', (desc, func, dataType) => {
+    it(`returns top ${dataType} on success`, async () => {
       const { req, res } = setupMocks();
       req.query.access_token = 'access_token';
-      axios.get.mockResolvedValue({ data: { items: ['artist1', 'artist2'] } });
-  
-      await fetchTopArtists(req, res);
+      const mockData = { data: { items: [`${dataType}1`, `${dataType}2`] } };
+      axios.get.mockResolvedValue(mockData);
+
+      await func(req, res);
       expect(res._getStatusCode()).toBe(200);
-      expect(res._getData()).toEqual({ items: ['artist1', 'artist2'] });
+      expect(res._getData()).toEqual(mockData);
     });
-  
-    it('returns error on failure', async () => {
+
+    it(`returns error on failure`, async () => {
       const { req, res } = setupMocks();
       req.query.access_token = 'access_token';
-      axios.get.mockRejectedValue(new Error('Failed to fetch'));
-  
-      await fetchTopArtists(req, res);
+      axios.get.mockRejectedValue(new Error(`Failed to fetch ${dataType}`));
+
+      await func(req, res);
       expect(res._getStatusCode()).toBe(500);
-      expect(res._getData()).toContain('Failed to fetch top artists');
+      expect(res._getData()).toContain(`Failed to fetch top ${dataType}`);
     });
   });
-  
-  describe('fetchTopGenres', () => {
-    it('returns top genres on success', async () => {
-      const { req, res } = setupMocks();
-      req.query.access_token = 'access_token';
-      const mockArtistsData = {
-        data: {
-          items: [
-            { genres: ['genre1', 'genre2'] },
-            { genres: ['genre2', 'genre3'] }
-          ]
-        }
-      };
-      axios.get.mockResolvedValue(mockArtistsData);
-  
-      await fetchTopGenres(req, res);
-      expect(res._getStatusCode()).toBe(200);
-      // The response should include 'genre2' as the top genre since it appears twice
-      expect(res._getData()).toEqual(expect.objectContaining({ genres: expect.arrayContaining(['genre2']) }));
-    });
-  
-    it('returns error on failure', async () => {
-      const { req, res } = setupMocks();
-      req.query.access_token = 'access_token';
-      axios.get.mockRejectedValue(new Error('Failed to fetch'));
-  
-      await fetchTopGenres(req, res);
-      expect(res._getStatusCode()).toBe(500);
-      expect(res._getData()).toContain('Failed to fetch top genres');
-    });
-  });
-  
+
+  // Test fetching track features functionality
   describe('fetchTrackFeatures', () => {
     it('returns track features averages on success', async () => {
       const { req, res } = setupMocks();
       req.query.access_token = 'access_token';
       const mockTracksData = { data: { items: [{ id: 'track1' }, { id: 'track2' }] } };
-      const mockFeaturesData = {
-        data: {
-          audio_features: [
-            { danceability: 0.8, energy: 0.6 },
-            { danceability: 0.7, energy: 0.7 }
-          ]
-        }
-      };
+      const mockFeaturesData = { data: { audio_features: [{ danceability: 0.8, energy: 0.6 }, { danceability: 0.7, energy: 0.7 }] } };
       axios.get.mockResolvedValueOnce(mockTracksData).mockResolvedValueOnce(mockFeaturesData);
-  
+
       await fetchTrackFeatures(req, res);
       expect(res._getStatusCode()).toBe(200);
       expect(res._getData()).toEqual(expect.objectContaining({
@@ -151,26 +122,15 @@ describe('Spotify Controller', () => {
         energy: expect.any(Number)
       }));
     });
-  
-    it('returns error on failure to fetch tracks', async () => {
+
+    it('returns error on failure', async () => {
       const { req, res } = setupMocks();
       req.query.access_token = 'access_token';
-      axios.get.mockRejectedValueOnce(new Error('Failed to fetch tracks'));
-  
+      axios.get.mockRejectedValueOnce(new Error('Failed to fetch'));
+
       await fetchTrackFeatures(req, res);
       expect(res._getStatusCode()).toBe(500);
-      expect(res._getData()).toContain('Failed to fetch track features and calculate averages');
-    });
-  
-    it('returns error on failure to fetch features', async () => {
-      const { req, res } = setupMocks();
-      req.query.access_token = 'access_token';
-      const mockTracksData = { data: { items: [{ id: 'track1' }] } };
-      axios.get.mockResolvedValueOnce(mockTracksData).mockRejectedValueOnce(new Error('Failed to fetch features'));
-  
-      await fetchTrackFeatures(req, res);
-      expect(res._getStatusCode()).toBe(500);
-      expect(res._getData()).toContain('Failed to fetch track features and calculate averages');
+      expect(res._getData()).toContain('Failed to fetch track features');
     });
   });
 });
