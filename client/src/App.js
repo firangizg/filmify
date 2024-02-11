@@ -1,37 +1,35 @@
-// This file contains the code for the main App component, including the LoginButton component.
 import './App.css';
 import Stats from './components/Stats';
-import Movies from './components/Movies'
-
+import Movies from './components/Movies';
+import Expired from './components/Expired';
 import React from 'react';
-import { BrowserRouter as Router, Routes } from 'react-router-dom';
 import LoginButton from './components/LoginButton';
 
 const App = () => {
-  // Detect if user is logged in by checking the URL for the access token
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = urlParams.get('access_token');
+  const hasExpired = window.location.pathname.endsWith('/expired'); 
+
+  if (hasExpired) {
+    // Directly return the Expired component without using Router or Routes
+    return <Expired />;
+  }
 
   return (
     <div className="App">
-        {/*if user is logged in show the final page*/}
+      {/* Check if user is logged in and render content accordingly */}
       {accessToken ? (
-          <>
-              <h1 className="AppTitle">Filmify</h1>
-              <Movies />
-              <Stats />
-          </>)
-          : (
         <>
-            {/* otherwise have the user log in*/}
+          <h1 className="AppTitle">Filmify</h1>
+          <Movies />
+          <Stats />
+        </>
+      ) : (
+        <>
           <h1 className="AppTitle">Filmify</h1>
           <LoginButton />
         </>
       )}
-      <Router>
-        <Routes>
-        </Routes>
-      </Router>
     </div>
   );
 };

@@ -45,8 +45,14 @@ export const fetchTopTracks = async (req, res) => {
         });
         res.json(response.data);
     } catch (error) {
-        console.error('Error fetching top tracks', error);
-        res.status(500).json({ error: "Failed to fetch top tracks" });
+        // Check if the error is due to an expired token
+        if (error.response && error.response.status === 401) {
+            // Token expired, redirect to session expired page
+            res.redirect(`${config.clientBaseUrl}/expired`);
+        } else {
+            console.error('Error fetching top tracks', error);
+            res.status(500).json({ error: "Failed to fetch top tracks" });
+        }
     }
 };
 
@@ -60,8 +66,13 @@ export const fetchTopArtists = async (req, res) => {
         });
         res.json(response.data);
     } catch (error) {
-        console.error('Error fetching top artists', error);
-        res.status(500).json({ error: "Failed to fetch top artists" });
+        if (error.response && error.response.status === 401) {
+            // Token expired, redirect to session expired page
+            res.redirect(`${config.clientBaseUrl}/expired`);
+        } else {
+            console.error('Error fetching top artists', error);
+            res.status(500).json({ error: "Failed to fetch top artists" });
+        }
     }
 };
 
@@ -73,20 +84,25 @@ export const fetchTopGenres = async (req, res) => {
                 'Authorization': 'Bearer ' + req.query.access_token
             }
         });
-  
+
         const genreCounts = {};
         for (let artist of data.items) {
             for (let genre of artist.genres) {
                 genreCounts[genre] = (genreCounts[genre] || 0) + 1;
             }
         }
-  
-        // Sort genres by count and return top ones
+
         const topGenres = Object.entries(genreCounts).sort(([,a], [,b]) => b - a).map(([genre]) => genre);
         res.json({ genres: topGenres });
-        
+
     } catch (error) {
-        res.status(500).json({ error: "Failed to fetch top genres" });
+        if (error.response && error.response.status === 401) {
+            // Token expired, redirect to session expired page
+            res.redirect(`${config.clientBaseUrl}/expired`);
+        } else {
+            console.error('Error fetching top genres', error);
+            res.status(500).json({ error: "Failed to fetch top genres" });
+        }
     }
 };
 
@@ -147,7 +163,12 @@ export const fetchTrackFeatures = async (req, res) => {
         res.json(averages);
   
     } catch (error) {
-        console.error('Error fetching track features:', error.response ? error.response.data : error.message);
-        res.status(500).json({ error: "Failed to fetch track features and calculate averages" });
+        if (error.response && error.response.status === 401) {
+            // Token expired, redirect to session expired page
+            res.redirect(`${config.clientBaseUrl}/expired`);
+        } else {
+            console.error('Error fetching track features:', error.response ? error.response.data : error.message);
+            res.status(500).json({ error: "Failed to fetch track features and calculate averages" });
+        }
     }
 };
