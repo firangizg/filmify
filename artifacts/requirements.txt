@@ -1,5 +1,0 @@
-run the server and client in seperate terminals. 
-.env file inside server folder contains:
-- SPOTIFY_CLIENT_ID
-- SPOTIFY_CLIENT_SECRET
-- PORT (optional)

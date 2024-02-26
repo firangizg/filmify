@@ -1,6 +1,7 @@
-// Controller for handling Spotify login, HTTP requests and responses
-import axios from 'axios';
+// Controller for handling Spotify API requests
+import SpotifyService from '../services/spotifyService.js';
 import config from '../config.js'; 
+import logger from '../logger.js';
 
 // Controller for handling Spotify login
 export const login = (req, res) => {
@@ -10,27 +11,15 @@ export const login = (req, res) => {
 };
 
 // Controller for handling Spotify callback
-export const callback  = async (req, res) => {
+export const callback = async (req, res) => {
     const code = req.query.code || null;
 
     try {
-        const params = new URLSearchParams();
-        params.append('code', code);
-        params.append('redirect_uri', `${config.serverBaseUrl}/callback`);
-        params.append('grant_type', 'authorization_code');
-
-        const response = await axios.post('https://accounts.spotify.com/api/token', params, {
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic ' + Buffer.from(`${config.spotifyClientId}:${config.spotifyClientSecret}`).toString('base64')
-            }
-        });
-
-        const { access_token, refresh_token } = response.data;
-        // Redirect to client with tokens
+        const tokens = await SpotifyService.getTokens(code);
+        const { access_token, refresh_token } = tokens;
         res.redirect(`${config.clientBaseUrl}/logged_in?access_token=${access_token}&refresh_token=${refresh_token}`);
     } catch (error) {
-        console.error('Error in Spotify callback', error);
+        logger.error('Error in Spotify callback', error);
         res.redirect(`${config.clientBaseUrl}/error`);
     }
 };
@@ -38,106 +27,50 @@ export const callback  = async (req, res) => {
 // Controller for fetching top tracks
 export const fetchTopTracks = async (req, res) => {
     try {
-        const response = await axios.get('https://api.spotify.com/v1/me/top/tracks', {
-            headers: {
-                'Authorization': `Bearer ${req.query.access_token}`
-            }
-        });
-        res.json(response.data);
+        const data = await SpotifyService.fetchTopTracks(req.query.access_token);
+        res.json(data);
     } catch (error) {
-        // Check if the error is due to an expired token
-        if (error.response && error.response.status === 401) {
-            // Token expired, redirect to session expired page
-            res.redirect(`${config.clientBaseUrl}/expired`);
-        } else {
-            console.error('Error fetching top tracks', error);
-            res.status(500).json({ error: "Failed to fetch top tracks" });
-        }
+        logger.error('Error fetching top tracks', error);
+        res.status(500).json({ error: "Failed to fetch top tracks" });
     }
 };
 
 // Controller for fetching top artists
 export const fetchTopArtists = async (req, res) => {
     try {
-        const response = await axios.get('https://api.spotify.com/v1/me/top/artists', {
-            headers: {
-                'Authorization': `Bearer ${req.query.access_token}`
-            }
-        });
-        res.json(response.data);
+        const data = await SpotifyService.fetchTopArtists(req.query.access_token);
+        res.json(data);
     } catch (error) {
-        if (error.response && error.response.status === 401) {
-            // Token expired, redirect to session expired page
-            res.redirect(`${config.clientBaseUrl}/expired`);
-        } else {
-            console.error('Error fetching top artists', error);
-            res.status(500).json({ error: "Failed to fetch top artists" });
-        }
+        logger.error('Error fetching top artists', error);
+        res.status(500).json({ error: "Failed to fetch top artists" });
     }
 };
 
 // Controller for fetching top genres
 export const fetchTopGenres = async (req, res) => {
     try {
-        const { data } = await axios.get('https://api.spotify.com/v1/me/top/artists', {
-            headers: {
-                'Authorization': 'Bearer ' + req.query.access_token
-            }
-        });
-
-        const genreCounts = {};
-        for (let artist of data.items) {
-            for (let genre of artist.genres) {
-                genreCounts[genre] = (genreCounts[genre] || 0) + 1;
-            }
-        }
-
-        const topGenres = Object.entries(genreCounts).sort(([,a], [,b]) => b - a).map(([genre]) => genre);
+        const genreCounts = await SpotifyService.fetchTopGenres(req.query.access_token);
+        const topGenres = Object.entries(genreCounts).sort(([, a], [, b]) => b - a).map(([genre]) => genre);
         res.json({ genres: topGenres });
-
     } catch (error) {
-        if (error.response && error.response.status === 401) {
-            // Token expired, redirect to session expired page
-            res.redirect(`${config.clientBaseUrl}/expired`);
-        } else {
-            console.error('Error fetching top genres', error);
-            res.status(500).json({ error: "Failed to fetch top genres" });
-        }
+        logger.error('Error fetching top genres', error);
+        res.status(500).json({ error: "Failed to fetch top genres" });
     }
 };
 
-// Controller for fetching track features
+// Controller for fetching top track features
 export const fetchTrackFeatures = async (req, res) => {
     try {
-        // Fetch top 20 tracks
-        const { data } = await axios.get('https://api.spotify.com/v1/me/top/tracks?limit=20', {
-            headers: {
-                'Authorization': 'Bearer ' + req.query.access_token
-            }
-        });
-  
-        // Extract track IDs from top tracks
-        const trackIds = data.items.map(track => track.id);
-  
-        // Fetch audio features for these tracks
-        const audioFeaturesResponse = await axios.get(`https://api.spotify.com/v1/audio-features?ids=${trackIds.join(',')}`, {
-            headers: {
-                'Authorization': 'Bearer ' + req.query.access_token
-            }
-        });
-  
-        const features = audioFeaturesResponse.data.audio_features;
-  
-        // Calculate averages
-        const totalFeatures = features.reduce((acc, feature) => ({
+        const features = await SpotifyService.fetchTrackFeatures(req.query.access_token);
+        const averages = features.reduce((acc, feature) => ({
             tempo: acc.tempo + feature.tempo,
             danceability: acc.danceability + feature.danceability,
             acousticness: acc.acousticness + feature.acousticness,
             happiness: acc.happiness + feature.valence,
             energy: acc.energy + feature.energy,
             speechiness: acc.speechiness + feature.speechiness,
-            loudness: acc.loudness + feature.loudness, // added
-            liveness: acc.liveness + feature.liveness  // added
+            loudness: acc.loudness + feature.loudness, 
+            liveness: acc.liveness + feature.liveness  
         }), {
             tempo: 0,
             danceability: 0,
@@ -145,30 +78,14 @@ export const fetchTrackFeatures = async (req, res) => {
             happiness: 0,
             energy: 0,
             speechiness: 0,
-            loudness: 0,  // initialized
-            liveness: 0   // initialized
+            loudness: 0,
+            liveness: 0
         });
-  
-        const averages = {
-            tempo: totalFeatures.tempo / features.length,
-            danceability: totalFeatures.danceability / features.length,
-            acousticness: totalFeatures.acousticness / features.length,
-            happiness: totalFeatures.happiness / features.length,
-            energy: totalFeatures.energy / features.length,
-            speechiness: totalFeatures.speechiness / features.length,
-            loudness: totalFeatures.loudness / features.length,  // calculated average
-            liveness: totalFeatures.liveness / features.length   // calculated average
-        };
-  
+
+        Object.keys(averages).forEach(key => averages[key] /= features.length);
         res.json(averages);
-  
-    } catch (error) {
-        if (error.response && error.response.status === 401) {
-            // Token expired, redirect to session expired page
-            res.redirect(`${config.clientBaseUrl}/expired`);
-        } else {
-            console.error('Error fetching track features:', error.response ? error.response.data : error.message);
-            res.status(500).json({ error: "Failed to fetch track features and calculate averages" });
-        }
+    } catch(error) {
+        logger.error('Error fetching track features:', error);
+        res.status(500).json({ error: "Failed to fetch track features and calculate averages" });
     }
 };
