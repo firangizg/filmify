@@ -1,8 +1,10 @@
+# import needed libraries
 from pandas import read_csv
 import random
 from sklearn.svm import LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 
+# create arrays to store movie genres for low & high values for each characteristic (based on Mapping 2.0 document)
 low_tempo = ["Drama", "Romance"]
 high_tempo = ["Musical", "Action", "Comedy", "Adventure"]
 low_acousticness = ["Action", "Adventure", "Thriller", "Sci-Fi"]
@@ -18,6 +20,7 @@ high_speechiness = ["Documentary", "History"]
 low_valence = ["Horror", "War", "Drama", "Crime"]
 high_valence = ["Comedy", "Romance", "Family"]
 
+# function to product genre given stats
 def produce_genre():
     # input file
     url = "single_test_data.csv"
@@ -141,6 +144,6 @@ def genre_id(genre):
 
 genre = produce_genre()
 genre_num = genre_id(genre)
-print(genre_num)
+return (genre_num)
 
 
