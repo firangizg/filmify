@@ -49,7 +49,7 @@ function runPythonScript(scriptPath, args) {
 // Run the Python file
 runPythonScript('/ml/temp_alg.py', []);
 
-
+function
 
 //returns a random integer from 0 to the max
 function getRandomInt(max) {
