@@ -8,6 +8,7 @@ import Genres from './Genres.js';
 import Characteristics from './Characteristics.js';
 import Tracks from './Tracks.js';
 import Artists from './Artists.js';
+import MoodAnalysis from './MoodAnalysis.js';
 
 // This component displays the statistics of the song.
 class Stats extends Component {
@@ -37,6 +38,7 @@ class Stats extends Component {
         <h2>Statistics</h2>
         <Genres accessToken={accessToken} />
         <Characteristics accessToken={accessToken} />
+        <MoodAnalysis accessToken={accessToken} />
         <div className="list-stats-container">
           <Tracks accessToken={accessToken} />
           <Artists accessToken={accessToken} />
