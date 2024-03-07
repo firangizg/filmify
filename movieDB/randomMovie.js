@@ -47,7 +47,7 @@ async function getMovie() {
     } else {
         //choose a random movie that has just the first genre
         console.log(genre1);
-        query = pgp.as.format(`SELECT * FROM films WHERE ${genre1} = ANY(genre_ids) ORDER BY random() limit 1`);
+        query = pgp.as.format(`SELECT * FROM films WHERE ${genre1} = ANY(genre_ids) ORDER BY random() limit 4`);
     }
 
     // create a Pool for the database connection and run the query
