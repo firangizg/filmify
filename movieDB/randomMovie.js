@@ -18,39 +18,6 @@ const credentials = {
     port: process.env.PORT,
 };
 
-const { spawn } = child_process;
-
-// Run a Python script and return output
-function runPythonScript(scriptPath, args) {
-
-    // Use child_process.spawn method from
-    // child_process module and assign it to variable
-    const pyProg = spawn('python', [scriptPath].concat(args));
-
-    // Collect data from script and print to console
-    let data = '';
-    pyProg.stdout.on('data', (stdout) => {
-        data += stdout.toString();
-    });
-    console.log("PYTHON DATA: ", data);
-
-    // Print errors to console, if any
-    pyProg.stderr.on('data', (stderr) => {
-        console.log(`stderr: ${stderr}`);
-    });
-
-    // When script is finished, print collected data
-    pyProg.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-        console.log(data);
-    });
-}
-
-// Run the Python file
-runPythonScript('/ml/temp_alg.py', []);
-
-function
-
 //returns a random integer from 0 to the max
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -77,11 +44,11 @@ async function getMovie() {
         console.log(genre1);
         console.log(genre2);
         //choose a random movie that has the both genres
-        query = pgp.as.format(`SELECT * FROM films WHERE ${genre1} = ANY(genre_ids) AND ${genre2} = ANY(genre_ids) ORDER BY random() limit 1`);
+        query = pgp.as.format(`SELECT * FROM movies WHERE ${genre1} = ANY(genre_ids) AND ${genre2} = ANY(genre_ids) ORDER BY random() limit 1`);
     } else {
         //choose a random movie that has just the first genre
         console.log(genre1);
-        query = pgp.as.format(`SELECT * FROM films WHERE ${genre1} = ANY(genre_ids) ORDER BY random() limit 1`);
+        query = pgp.as.format(`SELECT * FROM movies WHERE ${genre1} = ANY(genre_ids) ORDER BY random() limit 1`);
     }
 
     // create a Pool for the database connection and run the query
