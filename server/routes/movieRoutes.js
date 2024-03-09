@@ -8,4 +8,6 @@ const router = express.Router();
 // Routes
 router.get('/fetch-movies', movieController.getMovies);
 
+router.get('/fetch-movies-from-db', movieController.getMoviesFromDB);
+
 export default router;
