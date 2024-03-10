@@ -1,7 +1,7 @@
 // Controller for the movie routes
 import movieService from '../services/movieService.js';
 import fs from 'fs';
-import {as} from "pg-promise";
+// import {as} from "pg-promise";
 import logger from "../logger.js";
 import spotifyService from "../services/spotifyService.js";
 
@@ -27,8 +27,8 @@ const movieController = {
     },
     getGenre: async (req, res) => {
         try {
-            const genre = await movieService.fetchGenre(req.query.characteristics);
-            res.json(genre);
+            const genre = await movieService.fetchGenre(req.query.spotify_characteristics);
+            res.json({final_genre: genre});
         } catch (error) {
             logger.error(`Error in getGenre: ${error}`);
             res.status(500).send('Failed to fetch genre');
@@ -39,7 +39,7 @@ const movieController = {
 
             // Fetch the movies from the database and prints them to file
             const movies = await movieService.fetchMoviesFromDB(req.query.genre_id);
-            res.json(movies);
+            res.json({ movies: movies });
         } catch (error) {
             logger.error(`Error in getMoviesFromDB: ${error}`);
             res.status(500).send('Failed to fetch movies');
