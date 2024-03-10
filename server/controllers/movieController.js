@@ -31,7 +31,7 @@ const movieController = {
             res.json(genre);
         } catch (error) {
             logger.error(`Error in getGenre: ${error}`);
-            res.status(500).send('Failed to fetch movies');
+            res.status(500).send('Failed to fetch genre');
         }
     },
     getMoviesFromDB: async (req, res) => {

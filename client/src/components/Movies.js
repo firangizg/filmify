@@ -23,9 +23,10 @@ class Movies extends Component {
                 const characteristic_score = spotify_data[key].toFixed(2) // Round to 2 decimal places
                 final_chars.push({ characteristic_name, characteristic_score })
             }).filter(Boolean);
+            console.log("test");
 
             const genre_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-genre?characteristics=${final_chars}`);
-            const genre_id = await genre_response.json();
+            const genre_id = await Number(genre_response);
 
             const movie_response = await  fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_id}`);
             const movie_data = await movie_response.json();
