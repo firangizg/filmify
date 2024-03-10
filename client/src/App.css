@@ -75,8 +75,9 @@ html {
 }
 .list-stats-container {
   display: flex;
+  justify-content: space-around; 
+  align-items: start;
   flex-wrap: wrap;
-  gap: 0 25vw;
 }
 .genres-container {
   display: flex;
@@ -116,11 +117,13 @@ html {
   flex-direction: column;
   gap: 2rem;
   margin-bottom: 6rem;
+  flex: 1;
 }
 .track-artist {
   display: flex;
   gap: 2rem;
   align-items: center;
+  flex: 1;
 }
 
 /* MOVIES */

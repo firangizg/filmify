@@ -1,28 +1,42 @@
+import React from 'react';
 import './App.css';
 import Stats from './components/Stats';
 import Movies from './components/Movies';
 import Expired from './components/Expired';
-import React from 'react';
 import LoginButton from './components/LoginButton';
+import html2canvas from 'html2canvas';
 
 const App = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = urlParams.get('access_token');
-  const hasExpired = window.location.pathname.endsWith('/expired'); 
+  const hasExpired = window.location.pathname.endsWith('/expired');
+
+  const handleDownload = () => {
+    const appElement = document.getElementById('root');
+
+    html2canvas(appElement, { useCORS: true, scrollY: -window.scrollY }).then((canvas) => {
+      const base64image = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.href = base64image;
+      link.download = 'FilmifySummary.png';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  };
 
   if (hasExpired) {
-    // Directly return the Expired component without using Router or Routes
     return <Expired />;
   }
 
   return (
     <div className="App">
-      {/* Check if user is logged in and render content accordingly */}
       {accessToken ? (
         <>
           <h1 className="AppTitle">Filmify</h1>
           <Movies />
           <Stats />
+          <button onClick={handleDownload}>Download Summary</button>
         </>
       ) : (
         <>
