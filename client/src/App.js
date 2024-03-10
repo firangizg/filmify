@@ -10,10 +10,10 @@ const App = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = urlParams.get('access_token');
   const hasExpired = window.location.pathname.endsWith('/expired');
-
+  // add a function to handle the download of the summary
   const handleDownload = () => {
     const appElement = document.getElementById('root');
-
+    // use html2canvas to take a screenshot of the app and download it
     html2canvas(appElement, { useCORS: true, scrollY: -window.scrollY }).then((canvas) => {
       const base64image = canvas.toDataURL("image/png");
       const link = document.createElement('a');
