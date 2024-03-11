@@ -2,8 +2,6 @@
 import React, { Component } from 'react';
 import '../App.css';
 
-import sample from './sample.json'
-
 //Component for displaying the movies recommended
 class Movies extends Component {
     state = {
@@ -170,8 +168,8 @@ class Movies extends Component {
             const genre_num = await this.getGenre();
             const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
             const movie_data = await movie_response.json();
-            this.setState({movies: movie_data});
-            console.log(movie_data);
+            this.setState({movies: movie_data.movies});
+            console.log(movie_data.movies);
         } catch (error) {
             console.error("Failed to fetch characteristics, genre, and movies", error);
         }
@@ -187,21 +185,19 @@ class Movies extends Component {
     render() {
         // const movies = this.getDBMovies();
         const movies = this.state.movies;
-        console.log(movies);
 
         return (
             <div id="Recommendations">
                 <h2>Recommendations</h2>
                 <div className="movie-recommendation-container">
-                    <h4>Your suggested genre is: {this.state.genre}</h4>
+                    {/*<h4>Your suggested genre is: {this.state.genre}</h4>*/}
                      {/*For every sample movie display its poster, title, and reasoning*/}
-                    {/*{movies?.map((item, index) => (*/}
-                    {/*    <div className="movie-recommendation" key={index}>*/}
-                    {/*        <img className="movie-poster" src={item.movie_poster} alt="movie poster"></img>*/}
-                    {/*            <h4>{item.movie_title}</h4>*/}
-                    {/*            <p>{item.recommendation_reasoning}</p>*/}
-                    {/*    </div>*/}
-                    {/*))}*/}
+                    {movies?.map((item, index) => (
+                        <div className="movie-recommendation" key={index}>
+                            <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
+                                <h4>{item.title}</h4>
+                        </div>
+                    ))}
 
                 </div>
             </div>
