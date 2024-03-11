@@ -8,6 +8,10 @@ const config = {
   spotifyClientId: process.env.SPOTIFY_CLIENT_ID,
   spotifyClientSecret: process.env.SPOTIFY_CLIENT_SECRET,
   movieApiKey: process.env.API_KEY,
+  user: process.env.DB_USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password:process.env.PASSWORD
 };
 
 export default config;
