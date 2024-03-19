@@ -1,5 +1,14 @@
 /* This file contains the CSS for the entire application */
 
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* COLORS */
 :root {
   --off-black: #191414;
@@ -124,6 +133,9 @@ html {
 }
 
 /* MOVIES */
+.rating p{
+  text-align: center;
+}
 .movie-poster {
   width: 100%;
 }
@@ -132,11 +144,15 @@ html {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 3rem;
   margin-bottom: 6rem;
+  text-align: center;
+}
+.reason p{
+  text-align: center;
+  font-size: large;
 }
 .movie-recommendation{
   width: 100%;
 }
-
 body, html {
   height: 100%;
   margin: 0;
