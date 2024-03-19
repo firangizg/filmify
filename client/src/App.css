@@ -153,6 +153,13 @@ html {
 .movie-recommendation{
   width: 100%;
 }
+
+.warning p{
+  text-align: center;
+  font-size: small;
+  font-style: italic;
+  font-weight: bold;
+}
 body, html {
   height: 100%;
   margin: 0;

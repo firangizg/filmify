@@ -204,7 +204,9 @@ class Movies extends Component {
                                 <p>{"Rating: " + item.certification}</p>
                         </div>
                     ))}
-
+                </div>
+                <div className="warning">
+                    <p>Users under the age of 17 should only watch rated R movies with parental permission.</p>
                 </div>
             </div>
         )
