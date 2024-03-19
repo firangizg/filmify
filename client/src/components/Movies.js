@@ -5,8 +5,10 @@ import '../App.css';
 //Component for displaying the movies recommended
 class Movies extends Component {
     state = {
+        spotify_artist: [],
         spotify_characteristics: [],
         movies: [],
+        art_name: "",
         genre_id: 0,
         genre: "",
     };
@@ -19,8 +21,21 @@ class Movies extends Component {
             const spotify_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/track-features?access_token=${accessToken}`);
             const spotify_data = await spotify_response.json();
             this.setState({spotify_characteristics: spotify_data});
+
         } catch (error) {
             console.error("Failed to fetch characteristics", error);
+        }
+    }
+    async grabArtist() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        // Fetch the artist
+        try {
+            const spotify_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/top-artist?access_token=${accessToken}`);
+            const spotify_dataArt = await spotify_responseArt.json();
+            this.setState({spotify_artist: spotify_dataArt});
+        } catch (error) {
+            console.error("Failed to fetch artist", error);
         }
     }
     async getGenre ()  {
@@ -162,10 +177,26 @@ class Movies extends Component {
         this.setState({genre_id: genre_id});
         return genre_id;
     }
+
+    async getArtist(){
+        const artist = this.state.spotify_artist;
+        let topArtists = [];
+        Object.entries(artist).forEach(([key, value]) => {
+            if(key==="name"){
+                topArtists.push(value);
+            }
+            return topArtists[0];
+        })
+    }
+
     async componentDidMount() {
         try {
             await this.grabChars();
+            await this.grabArtist();
             const genre_num = await this.getGenre();
+            const artist_name = await this.getArtist();
+            const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_name=${artist_name}`);
+            const movie_dataArt = await movie_responseArt.json();
             const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
             const movie_data = await movie_response.json();
             this.setState({movies: movie_data.movies});

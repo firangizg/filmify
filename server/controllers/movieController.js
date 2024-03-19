@@ -44,6 +44,18 @@ const movieController = {
             logger.error(`Error in getMoviesFromDB: ${error}`);
             res.status(500).send('Failed to fetch movies');
         }
-    }
+    },
+    getArtistMoviesFromDB: async (req, res) => {
+        try {
+
+            // Fetch the movies from the database and prints them to file
+            const movies = await movieService.fetchArtistMoviesFromDB(req.query.artist_name);
+            res.json({ movies: movies });
+        } catch (error) {
+            logger.error(`Error in getArtistMoviesFromDB: ${error}`);
+            res.status(500).send('Failed to fetch artistMovies');
+        }
+    },
+
 };
 export default movieController;
