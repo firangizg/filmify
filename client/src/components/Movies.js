@@ -185,6 +185,7 @@ class Movies extends Component {
     render() {
         // const movies = this.getDBMovies();
         const movies = this.state.movies;
+        const genre = this.state.genre;
 
         return (
             <div id="Recommendations">
@@ -194,11 +195,18 @@ class Movies extends Component {
                      {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
                         <div className="movie-recommendation" key={index}>
+                            <div className="reason">
+                                <p>Because your generated movie genre is {genre}</p>
+                            </div>
+                            <br/>
                             <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
                                 <h4>{item.title}</h4>
+                                <p>{"Rating: " + item.certification}</p>
                         </div>
                     ))}
-
+                </div>
+                <div className="warning">
+                    <p>Users under the age of 17 should only watch rated R movies with parental permission.</p>
                 </div>
             </div>
         )
