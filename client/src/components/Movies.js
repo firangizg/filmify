@@ -8,6 +8,7 @@ class Movies extends Component {
         spotify_artist: [],
         spotify_characteristics: [],
         movies: [],
+        artMovies: [],
         art_name: "",
         genre_id: 0,
         genre: "",
@@ -31,9 +32,11 @@ class Movies extends Component {
         const accessToken = urlParams.get('access_token');
         // Fetch the artist
         try {
-            const spotify_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/top-artist?access_token=${accessToken}`);
+            const spotify_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/top-artists?access_token=${accessToken}`);
             const spotify_dataArt = await spotify_responseArt.json();
-            this.setState({spotify_artist: spotify_dataArt});
+            this.setState({spotify_artist: spotify_dataArt.items[0]});
+            this.setState({art_name: spotify_dataArt.items[0].name})
+            console.log(this.state.art_name);
         } catch (error) {
             console.error("Failed to fetch artist", error);
         }
@@ -179,14 +182,8 @@ class Movies extends Component {
     }
 
     async getArtist(){
-        const artist = this.state.spotify_artist;
-        let topArtists = [];
-        Object.entries(artist).forEach(([key, value]) => {
-            if(key==="name"){
-                topArtists.push(value);
-            }
-            return topArtists[0];
-        })
+        const artist = this.state.art_name;
+        return artist;
     }
 
     async componentDidMount() {
@@ -195,13 +192,18 @@ class Movies extends Component {
             await this.grabArtist();
             const genre_num = await this.getGenre();
             const artist_name = await this.getArtist();
-            const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_name=${artist_name}`);
+            const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
             const movie_dataArt = await movie_responseArt.json();
             const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
             const movie_data = await movie_response.json();
             this.setState({movies: movie_data.movies});
+            this.setState({artMovies: movie_dataArt.movies});
             console.log(movie_data.movies);
+            console.log(movie_dataArt.movies);
         } catch (error) {
+            const artist_name = await this.getArtist();
+            console.log("failed to fetch artist", error);
+            console.log(artist_name);
             console.error("Failed to fetch characteristics, genre, and movies", error);
         }
     }
@@ -221,7 +223,7 @@ class Movies extends Component {
             <div id="Recommendations">
                 <h2>Recommendations</h2>
                 <div className="movie-recommendation-container">
-                    {/*<h4>Your suggested genre is: {this.state.genre}</h4>*/}
+                    {<h4> Your top artist is: {this.state.art_name}</h4>}
                      {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
                         <div className="movie-recommendation" key={index}>

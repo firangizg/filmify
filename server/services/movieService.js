@@ -193,16 +193,18 @@ const movieService = {
             throw error;
         }
     },
-    fetchArtistMoviesFromDB: async (artist_name) => {
+    fetchArtistMoviesFromDB: async (art_name) => {
         try {
-            const query = pgp.as.format(`SELECT * FROM artisttable WHERE ${art_band} = ANY(artist_band) ORDER BY random() limit 1`);
+            const query = pgp.as.format(`SELECT * FROM artisttable WHERE ${art_name} = ANY(artist_band) ORDER BY random() limit 1`);
             // create a Pool for the database connection and run the query
             const pool = new Pool(credentials);
             const result = await pool.query(query);
             //only print the movie details
             const movie = result.rows;
             await pool.end();
+            console.log(query);
             return movie;
+
         } catch (error) {
             logger.error(`Error in fetchArtistMoviesFromDB: ${error.message}`);
             throw error;
