@@ -195,11 +195,18 @@ class Movies extends Component {
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
             const movie_dataArt = await movie_responseArt.json();
             const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
-            const movie_data = await movie_response.json();
+            let movie_data = await movie_response.json();
+            movie_data.movies.map((item, index) => {
+                item.reason = `Because your generated movie genre is ${this.state.genre}`
+            });
+            if(movie_dataArt.movies.length !== 0) {
+                movie_data.movies[0] = movie_dataArt.movies[0];
+                movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;
+            }
             this.setState({movies: movie_data.movies});
             this.setState({artMovies: movie_dataArt.movies});
             console.log(movie_data.movies);
-            console.log(movie_dataArt.movies);
+            console.log(movie_dataArt.movies[0]);
         } catch (error) {
             const artist_name = await this.getArtist();
             console.log("failed to fetch artist", error);
@@ -224,12 +231,11 @@ class Movies extends Component {
             <div id="Recommendations">
                 <h2>Recommendations</h2>
                 <div className="movie-recommendation-container">
-                    {<h4> Your top artist is: {this.state.art_name}</h4>}
                      {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
                         <div className="movie-recommendation" key={index}>
                             <div className="reason">
-                                <p>Because your generated movie genre is {genre}</p>
+                                <p>{item.reason}</p>
                             </div>
                             <br/>
                             <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>

@@ -49,7 +49,7 @@ const movieController = {
         try {
 
             // Fetch the movies from the database and prints them to file
-            const movies = await movieService.fetchArtistMoviesFromDB(req.query.art_name);
+            const movies = await movieService.fetchArtistMoviesFromDB(req.query.artist_band);
             res.json({ movies: movies });
         } catch (error) {
             logger.error(`Error in getArtistMoviesFromDB: ${error}`);
