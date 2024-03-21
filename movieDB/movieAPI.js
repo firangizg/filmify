@@ -16,7 +16,6 @@ const credentials = {
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
     port: process.env.PORT,
-    ssl: process.env.SSL
 };
 
 //this function goes through all the pages the API has for the movie query and inserts all the movies into the local database
