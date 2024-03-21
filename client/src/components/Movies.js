@@ -212,6 +212,7 @@ class Movies extends Component {
             movie_data.movies.map((item, index) => {
                 item.reason = `Because your generated movie genre is ${this.state.genre}`
             });
+
             // let index = 0;
             // let genres = await this.getGenre();
             // let movie_data = [];
