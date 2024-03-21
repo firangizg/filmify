@@ -161,6 +161,19 @@ export async function normalizeAndRandom(characteristic_json) {
 
     query = pgp.as.format(`SELECT * FROM movies WHERE ${genre_num} = ANY(genre_ids) ORDER BY random() limit 4`);
     // query = pgp.as.format(`SELECT * FROM movies ORDER BY random() limit 4`);
+    let query2;
+//create the database query to select top artist movie
+    query2 = pgp.as.format(`SELECT * FROM artisttable WHERE ${art_band} = ANY(artist_band) ORDER BY random() limit 1`);
+
+    //creates a pool for the db connection and runs the query
+    const pool1 = new Pool(credentials);
+    const result1 = await pool1.query(query2);
+
+    const movieArt = result1.rows[0];
+    console.log(movieArt);
+    await pool1.end();
+    //return movieArt;
+
 
 
     // create a Pool for the database connection and run the query
@@ -170,12 +183,15 @@ export async function normalizeAndRandom(characteristic_json) {
     const movie1 = result.rows[0];
     const movie2 = result.rows[1];
     const movie3 = result.rows[2];
-    const movie4 = result.rows[3];
+    let movie4 = result.rows[3];
+
+    if(movieArt!==""){
+        movie4 = movieArt;
+    }
     const movies = { movie1, movie2, movie3, movie4 }
     console.log(movies);
     await pool.end();
     return movies;
-
 
 }
 

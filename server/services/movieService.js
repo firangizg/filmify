@@ -192,6 +192,22 @@ const movieService = {
             logger.error(`Error in fetchMoviesFromDB: ${error.message}`);
             throw error;
         }
+    },
+    fetchArtistMoviesFromDB: async (art_name) => {
+        try {
+            const query = pgp.as.format(`SELECT movies.title, movies.poster_path, movies.certification FROM artistTable, movies WHERE artistTable.id = movies.id AND artist_band = '${art_name}' ORDER BY random() limit 1`);
+            // create a Pool for the database connection and run the query
+            const pool = new Pool(credentials);
+            const result = await pool.query(query);
+            //only print the movie details
+            const movie = result.rows;
+            await pool.end();
+            return movie;
+
+        } catch (error) {
+            logger.error(`Error in fetchArtistMoviesFromDB: ${error.message}`);
+            throw error;
+        }
     }
 };
 

@@ -1,7 +1,7 @@
 
 //import .env, fetch, and postgres
 import * as dotenv from "dotenv";
- import('node-fetch');
+ import fetch from 'node-fetch';
  import pgp from 'pg-promise';
  import pkg from "pg";
  const {Pool} = pkg;
@@ -16,8 +16,7 @@ const credentials = {
     host: process.env.HOST,
     database: process.env.DATABASE,
     password: process.env.PASSWORD,
-    port: process.env.PORT,
-    ssl: process.env.SSL
+    port: process.env.PORT
 };
 //These lists are lists of the topArtists on Spotify currently
 //we will be able to cycle through these arrays and add each of their movies to the topArtist films table in the database
@@ -119,6 +118,7 @@ async function getArtist(topArtist){
         //this is the api call where it uses the url and the options specified above
         const resp = await fetch(`${url}`, options);
         const data = await resp.json();
+        console.log(data);
         data.results.forEach(artist =>{
             let {id, name} = artist;
             artists.push({id, name});
@@ -155,7 +155,7 @@ async function getArtistMovies(topArtist_id, globalTop) {
                 //this lets the values for the movies/columns be a movie "object" in the array
                 let { title, genre_ids, id, original_language, original_title,
                     overview, popularity, poster_path, vote_average,
-                    vote_count} = artistMovie;
+                    vote_count } = artistMovie;
                 //fix and add the escape characters
                 const re = /'/gi;
                 title = title.replace(re,"''");
@@ -169,7 +169,6 @@ async function getArtistMovies(topArtist_id, globalTop) {
                 artistMovies.push({artist_id, artist_name, artist_band, title, genre_ids, id, original_language, original_title,
                     overview, popularity, poster_path, vote_average,
                     vote_count});
-
             });
                // console.log(artistMovies[0]);
             //here is the query and what will be sent to the database through the connection we set up with the credentials

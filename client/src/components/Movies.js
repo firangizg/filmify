@@ -5,8 +5,11 @@ import '../App.css';
 //Component for displaying the movies recommended
 class Movies extends Component {
     state = {
+        spotify_artist: [],
         spotify_characteristics: [],
         movies: [],
+        artMovies: [],
+        art_name: "",
         genre_id: 0,
         genre: "",
     };
@@ -19,11 +22,26 @@ class Movies extends Component {
             const spotify_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/track-features?access_token=${accessToken}`);
             const spotify_data = await spotify_response.json();
             this.setState({spotify_characteristics: spotify_data});
+
         } catch (error) {
             console.error("Failed to fetch characteristics", error);
         }
     }
-    async getGenre ()  {
+    async grabArtist() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        // Fetch the artist
+        try {
+            const spotify_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/top-artists?access_token=${accessToken}`);
+            const spotify_dataArt = await spotify_responseArt.json();
+            this.setState({spotify_artist: spotify_dataArt.items[0]});
+            this.setState({art_name: spotify_dataArt.items[0].name})
+            console.log(this.state.art_name);
+        } catch (error) {
+            console.error("Failed to fetch artist", error);
+        }
+    }
+    async getGenre () {
         const characteristics = this.state.spotify_characteristics;
         let low_char_genres = [];
         let less_low_char_genres = [];
@@ -104,7 +122,7 @@ class Movies extends Component {
         genres.push(high_char_genres);
         genres.push(low_char_genres);
 
-        if(high_char_genres.length === 0 && low_char_genres.length === 0) {
+        if (high_char_genres.length === 0 && low_char_genres.length === 0) {
             genres.push(less_high_char_genres);
             genres.push(less_low_char_genres);
         }
@@ -115,10 +133,22 @@ class Movies extends Component {
 
         let final_genre;
 
-        if(duplicates.length !== 0) {
-            final_genre = duplicates[Math.floor(Math.random()*duplicates.length)];
+        if (duplicates.length !== 0) {
+            final_genre = duplicates[Math.floor(Math.random() * duplicates.length)];
+            // if(duplicates.length-4 >= 0) {
+            //     let counter = 0;
+            //     while(counter < 4) {
+            //         final_genre.push(duplicates[Math.floor(Math.random()*duplicates.length)]);
+            //         counter+=1;
+            //     }
         } else {
-            final_genre = genres[Math.floor(Math.random()*genres.length)];
+            final_genre = genres[Math.floor(Math.random() * genres.length)];
+            // final_genre.push(duplicates);
+            // let counter = duplicates.length;
+            // while(counter < 4) {
+            //     final_genre = genres[Math.floor(Math.random()*genres.length)];
+            //     counter+=1;
+            // }
         }
 
         this.setState({genre: final_genre});
@@ -129,11 +159,11 @@ class Movies extends Component {
             genre_id = 28;
         } else if (final_genre === "Adventure") {
             genre_id = 12;
-        } else if(final_genre === "Comedy") {
+        } else if (final_genre === "Comedy") {
             genre_id = 35;
-        } else if(final_genre === "Crime") {
+        } else if (final_genre === "Crime") {
             genre_id = 80;
-        } else if(final_genre === "Documentary") {
+        } else if (final_genre === "Documentary") {
             genre_id = 99;
         } else if (final_genre === "Drama") {
             genre_id = 18;
@@ -157,46 +187,91 @@ class Movies extends Component {
             genre_id = 53;
         } else if (final_genre === "War") {
             genre_id = 10752;
+
         }
         console.log(genre_id);
         this.setState({genre_id: genre_id});
         return genre_id;
     }
+    async getArtist(){
+        const artist = this.state.art_name;
+        return artist;
+    }
+
     async componentDidMount() {
         try {
             await this.grabChars();
+            await this.grabArtist();
             const genre_num = await this.getGenre();
+            const artist_name = await this.getArtist();
+            //const artist_name = this.state.art_name;
+            const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
+            const movie_dataArt = await movie_responseArt.json();
             const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
-            const movie_data = await movie_response.json();
+            let movie_data = await movie_response.json();
+            movie_data.movies.map((item, index) => {
+                item.reason = `Because your generated movie genre is ${this.state.genre}`
+            });
+
+            // let index = 0;
+            // let genres = await this.getGenre();
+            // let movie_data = [];
+            // while(index < 4) {
+            //     let id = genres[index];
+            //     const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${id}`);
+            //     let mv_data = await movie_response.json();
+            //     movie_data.reason = `Because your generated movie genre is ${this.state.genres[index]}`
+            //     movie_data.push(mv_data);
+            //     index+=1;
+            // }
+            // console.log(movie_data);
+            // // let ctr = 0;
+            // // movie_data.movies.map((item, index) => {
+            // //     item.reason = `Because your generated movie genre is ${this.state.genres[ctr]}`
+            // // });
+            if(movie_dataArt.movies.length !== 0) {
+                movie_data.movies[0] = movie_dataArt.movies[0];
+                movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;
+            }
             this.setState({movies: movie_data.movies});
+            this.setState({artMovies: movie_dataArt.movies});
             console.log(movie_data.movies);
+            console.log(movie_dataArt.movies[0]);
         } catch (error) {
+            // const artist_name = await this.getArtist();
+            console.log("failed to fetch artist", error);
+            console.log(this.state.art_name);
             console.error("Failed to fetch characteristics, genre, and movies", error);
         }
     }
 
-    async getDBMovies () {
-        const genre_id = this.getGenre();
-        const movie_response = await  fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_id}`);
-        const movie_data = await movie_response.json();
-        this.setState({movies: movie_data});
-        // return movie_data;
-    }
+    // async getDBMovies () {
+    //     const genre_id = this.getGenre();
+    //     const movie_response = await  fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_id}`);
+    //     const movie_data = await movie_response.json();
+    //     this.setState({movies: movie_data});
+    //     // return movie_data;
+    // }
+    // componentDidUpdate(prevProps, prevState, snapshot) {
+    //     if (this.state.movies !== prevState.movies) {
+    //         // this.setState(prevState);
+    //     }
+    // }
+
     render() {
         // const movies = this.getDBMovies();
         const movies = this.state.movies;
-        const genre = this.state.genre;
-
+        // const genre = this.state.genre;
+        // const isFetching = this.state;
         return (
             <div id="Recommendations">
                 <h2>Recommendations</h2>
                 <div className="movie-recommendation-container">
-                    {/*<h4>Your suggested genre is: {this.state.genre}</h4>*/}
-                     {/*For every sample movie display its poster, title, and reasoning*/}
+                    {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
                         <div className="movie-recommendation" key={index}>
                             <div className="reason">
-                                <p>Because your generated movie genre is {genre}</p>
+                                <p>{item.reason}</p>
                             </div>
                             <br/>
                             <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>

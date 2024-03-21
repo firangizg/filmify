@@ -5,12 +5,12 @@ import fs from 'fs';
 import logger from "../logger.js";
 import spotifyService from "../services/spotifyService.js";
 
-const movieController = {
+const artistController = {
     // Fetches the movies from the movieService and writes them to a file
-    getMovies: async (req, res) => {
+    getArtistMovies: async (req, res) => {
         try {
             // Fetch the movies
-            const movies = await movieService.fetchMovies();
+            const movies = await artistService.fetchArtistMovies();
             const filePath = 'movieList.txt';
             // Delete the file if it exists
             if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
@@ -25,37 +25,25 @@ const movieController = {
             res.status(500).send('Failed to fetch movies');
         }
     },
-    getGenre: async (req, res) => {
+    getArtistGenre: async (req, res) => {
         try {
-            const genre = await movieService.fetchGenre(req.query.spotify_characteristics);
+            const genre = await artistService.fetchArtist(req.query.spotify_characteristics);
             res.json({final_genre: genre});
         } catch (error) {
             logger.error(`Error in getGenre: ${error}`);
             res.status(500).send('Failed to fetch genre');
         }
     },
-    getMoviesFromDB: async (req, res) => {
+    getArtistMoviesFromDB: async (req, res) => {
         try {
 
             // Fetch the movies from the database and prints them to file
-            const movies = await movieService.fetchMoviesFromDB(req.query.genre_id);
+            const movies = await artistService.fetchArtistMoviesFromDB(req.query.genre_id);
             res.json({ movies: movies });
         } catch (error) {
             logger.error(`Error in getMoviesFromDB: ${error}`);
             res.status(500).send('Failed to fetch movies');
         }
-    },
-    getArtistMoviesFromDB: async (req, res) => {
-        try {
-
-            // Fetch the movies from the database and prints them to file
-            const movies = await movieService.fetchArtistMoviesFromDB(req.query.artist_band);
-            res.json({ movies: movies });
-        } catch (error) {
-            logger.error(`Error in getArtistMoviesFromDB: ${error}`);
-            res.status(500).send('Failed to fetch artistMovies');
-        }
-    },
-
+    }
 };
-export default movieController;
+export default artistController;
