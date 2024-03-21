@@ -10,8 +10,8 @@ class Movies extends Component {
         movies: [],
         artMovies: [],
         art_name: "",
-        genre_ids: [],
-        genres: [],
+        genre_id: 0,
+        genre: "",
     };
     async grabChars() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -41,7 +41,7 @@ class Movies extends Component {
             console.error("Failed to fetch artist", error);
         }
     }
-    async getGenre ()  {
+    async getGenre () {
         const characteristics = this.state.spotify_characteristics;
         let low_char_genres = [];
         let less_low_char_genres = [];
@@ -122,7 +122,7 @@ class Movies extends Component {
         genres.push(high_char_genres);
         genres.push(low_char_genres);
 
-        if(high_char_genres.length === 0 && low_char_genres.length === 0) {
+        if (high_char_genres.length === 0 && low_char_genres.length === 0) {
             genres.push(less_high_char_genres);
             genres.push(less_low_char_genres);
         }
@@ -131,68 +131,68 @@ class Movies extends Component {
 
         let duplicates = genres.filter((item, index) => genres.indexOf(item) !== index);
 
-        let final_genre = [];
+        let final_genre;
 
-        if(duplicates.length-4 >= 0) {
-            let counter = 0;
-            while(counter < 4) {
-                final_genre.push(duplicates[Math.floor(Math.random()*duplicates.length)]);
-                counter+=1;
-            }
+        if (duplicates.length !== 0) {
+            final_genre = duplicates[Math.floor(Math.random() * duplicates.length)];
+            // if(duplicates.length-4 >= 0) {
+            //     let counter = 0;
+            //     while(counter < 4) {
+            //         final_genre.push(duplicates[Math.floor(Math.random()*duplicates.length)]);
+            //         counter+=1;
+            //     }
         } else {
-            final_genre.push(duplicates);
-            let counter = duplicates.length;
-            while(counter < 4) {
-                final_genre = genres[Math.floor(Math.random()*genres.length)];
-                counter+=1;
-            }
+            final_genre = genres[Math.floor(Math.random() * genres.length)];
+            // final_genre.push(duplicates);
+            // let counter = duplicates.length;
+            // while(counter < 4) {
+            //     final_genre = genres[Math.floor(Math.random()*genres.length)];
+            //     counter+=1;
+            // }
         }
 
-        this.setState({genres: final_genre});
+        this.setState({genre: final_genre});
 
-        let genre_id = [];
-        let index = 0;
+        let genre_id;
 
-        while(index < 4) {
-            if (final_genre[index] === "Action") {
-                genre_id.push(28);
-            } else if (final_genre[index] === "Adventure") {
-                genre_id.push(12);
-            } else if(final_genre[index] === "Comedy") {
-                genre_id.push(35);
-            } else if(final_genre[index] === "Crime") {
-                genre_id.push(80);
-            } else if(final_genre[index] === "Documentary") {
-                genre_id.push(99);
-            } else if (final_genre[index] === "Drama") {
-                genre_id.push(18);
-            } else if (final_genre[index] === "Family") {
-                genre_id.push(10751);
-            } else if (final_genre[index] === "Fantasy") {
-                genre_id.push(14);
-            } else if (final_genre[index] === "History") {
-                genre_id.push(36);
-            } else if (final_genre[index] === "Horror") {
-                genre_id.push(27);
-            } else if (final_genre[index] === "Musical") {
-                genre_id.push(10402);
-            } else if (final_genre[index] === "Mystery") {
-                genre_id.push(9648);
-            } else if (final_genre[index] === "Romance") {
-                genre_id.push(10749);
-            } else if (final_genre[index] === "Sci-Fi") {
-                genre_id.push(878);
-            } else if (final_genre[index] === "Thriller") {
-                genre_id.push(53);
-            } else if (final_genre[index] === "War") {
-                genre_id.push(10752);
-            }
+        if (final_genre === "Action") {
+            genre_id = 28;
+        } else if (final_genre === "Adventure") {
+            genre_id = 12;
+        } else if (final_genre === "Comedy") {
+            genre_id = 35;
+        } else if (final_genre === "Crime") {
+            genre_id = 80;
+        } else if (final_genre === "Documentary") {
+            genre_id = 99;
+        } else if (final_genre === "Drama") {
+            genre_id = 18;
+        } else if (final_genre === "Family") {
+            genre_id = 10751;
+        } else if (final_genre === "Fantasy") {
+            genre_id = 14;
+        } else if (final_genre === "History") {
+            genre_id = 36;
+        } else if (final_genre === "Horror") {
+            genre_id = 27;
+        } else if (final_genre === "Musical") {
+            genre_id = 10402;
+        } else if (final_genre === "Mystery") {
+            genre_id = 9648;
+        } else if (final_genre === "Romance") {
+            genre_id = 10749;
+        } else if (final_genre === "Sci-Fi") {
+            genre_id = 878;
+        } else if (final_genre === "Thriller") {
+            genre_id = 53;
+        } else if (final_genre === "War") {
+            genre_id = 10752;
+
         }
         console.log(genre_id);
-        this.setState({genre_ids: genre_id});
+        this.setState({genre_id: genre_id});
         return genre_id;
     }
-
     async getArtist(){
         const artist = this.state.art_name;
         return artist;
@@ -202,27 +202,32 @@ class Movies extends Component {
         try {
             await this.grabChars();
             await this.grabArtist();
-            // const genre_num = await this.getGenre();
-            // const artist_name = await this.getArtist();
-            const artist_name = this.state.art_name;
+            const genre_num = await this.getGenre();
+            const artist_name = await this.getArtist();
+            //const artist_name = this.state.art_name;
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
             const movie_dataArt = await movie_responseArt.json();
-            let index = 0;
-            let genres = await this.getGenre();
-            let movie_data = [];
-            while(index < 4) {
-                let id = genres[index];
-                const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${id}`);
-                let mv_data = await movie_response.json();
-                movie_data.reason = `Because your generated movie genre is ${this.state.genres[index]}`
-                movie_data.push(mv_data);
-                index+=1;
-            }
-            console.log(movie_data);
-            // let ctr = 0;
-            // movie_data.movies.map((item, index) => {
-            //     item.reason = `Because your generated movie genre is ${this.state.genres[ctr]}`
-            // });
+            const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
+            let movie_data = await movie_response.json();
+            movie_data.movies.map((item, index) => {
+                item.reason = `Because your generated movie genre is ${this.state.genre}`
+            });
+            // let index = 0;
+            // let genres = await this.getGenre();
+            // let movie_data = [];
+            // while(index < 4) {
+            //     let id = genres[index];
+            //     const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${id}`);
+            //     let mv_data = await movie_response.json();
+            //     movie_data.reason = `Because your generated movie genre is ${this.state.genres[index]}`
+            //     movie_data.push(mv_data);
+            //     index+=1;
+            // }
+            // console.log(movie_data);
+            // // let ctr = 0;
+            // // movie_data.movies.map((item, index) => {
+            // //     item.reason = `Because your generated movie genre is ${this.state.genres[ctr]}`
+            // // });
             if(movie_dataArt.movies.length !== 0) {
                 movie_data.movies[0] = movie_dataArt.movies[0];
                 movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;

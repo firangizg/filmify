@@ -180,7 +180,7 @@ const movieService = {
     },
     fetchMoviesFromDB: async (genre_id) => {
         try {
-            const query = pgp.as.format(`SELECT * FROM movies WHERE ${genre_id} = ANY(genre_ids) ORDER BY random() limit 1`);
+            const query = pgp.as.format(`SELECT * FROM movies WHERE ${genre_id} = ANY(genre_ids) ORDER BY random() limit 4`);
             // create a Pool for the database connection and run the query
             const pool = new Pool(credentials);
             const result = await pool.query(query);
