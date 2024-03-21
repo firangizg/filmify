@@ -36,9 +36,9 @@ class Stats extends Component {
     return (
       <div className="stats-container" id="stats">
         <h2>Statistics</h2>
-        <Genres accessToken={accessToken} />
-        <Characteristics accessToken={accessToken} />
         <MoodAnalysis accessToken={accessToken} />
+        <Characteristics accessToken={accessToken} />
+        <Genres accessToken={accessToken} />
         <div className="list-stats-container">
           <Tracks accessToken={accessToken} />
           <Artists accessToken={accessToken} />

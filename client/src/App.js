@@ -5,6 +5,7 @@ import Movies from './components/Movies';
 import Expired from './components/Expired';
 import LoginButton from './components/LoginButton';
 import html2canvas from 'html2canvas';
+import logo from './components/updated_logo.png';
 
 const App = () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -33,7 +34,7 @@ const App = () => {
     <div className="App">
       {accessToken ? (
         <>
-          <h1 className="AppTitle">Filmify</h1>
+          <h1 className="AppTitle">Filmify<img src={logo} alt="logo"></img></h1>
           <Movies />
           <Stats />
           <button onClick={handleDownload}>Download Summary</button>
