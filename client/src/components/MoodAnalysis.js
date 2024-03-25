@@ -31,18 +31,21 @@ class Characteristics extends Component {
       console.error("Failed to fetch characteristics", error);
     }
   }
+  // perform the mood algorithm
   moodAlgorithm = () => {
     const { mood_characteristics } = this.state;
     let valenceHigh = false;
     let energyHigh = false;
     let tempoHigh = false;
     const moods = [
-      [{ mood: "Energetic" }, { color: "#FFF95D" }],
-      [{ mood: "Happy" }, { color: "#FF9356" }],
-      [{ mood: "Calm" }, { color: "#C3C9DA" }],
-      [{ mood: "Angry" }, { color: "#A20D0D" }],
-      [{ mood: "Sad/Anxious" }, { color: "#306082" }],
-      [{ mood: "Depressed" }, { color: "#000000" }]
+      [{ mood: "Energetic" }, { color: "#FFF95D" }, {valence: "high"}, {energy: "high"}, {tempo: "high"}],
+      [{ mood: "Happy" }, { color: "#FF9356" }, {valence: "high"}, {energy: "high"}, {tempo: "low"}],
+      [{ mood: "Happy" }, { color: "#FF9356" }, {valence: "high"}, {energy: "low"}, {tempo: "high"}],
+      [{ mood: "Calm" }, { color: "#C3C9DA" }, {valence: "high"}, {energy: "low"}, {tempo: "low"}],
+      [{ mood: "Angry" }, { color: "#A20D0D" }, {valence: "low"}, {energy: "high"}, {tempo: "high"}],
+      [{ mood: "Anxious" }, { color: "#306082" }, {valence: "low"}, {energy: "high"}, {tempo: "low"}],
+      [{ mood: "Anxious" }, { color: "#306082" }, {valence: "low"}, {energy: "low"}, {tempo: "high"}],
+      [{ mood: "Depressed" }, { color: "#000000" }, {valence: "low"}, {energy: "low"}, {tempo: "low"}]
     ];
     let mood;
     mood_characteristics.forEach(characteristic => {
@@ -70,34 +73,43 @@ class Characteristics extends Component {
       case valenceHigh && energyHigh && tempoHigh:
         mood = moods[0];
         break;
-      case (valenceHigh && energyHigh && !tempoHigh) || (valenceHigh && !energyHigh && tempoHigh):
+      case (valenceHigh && energyHigh && !tempoHigh):
         mood = moods[1];
         break;
-      case valenceHigh && !energyHigh && !tempoHigh:
+      case (valenceHigh && !energyHigh && tempoHigh):
         mood = moods[2];
         break;
-      case !valenceHigh && energyHigh && tempoHigh:
+      case valenceHigh && !energyHigh && !tempoHigh:
         mood = moods[3];
         break;
-      case (!valenceHigh && energyHigh && !tempoHigh) || (!valenceHigh && !energyHigh && tempoHigh):
+      case !valenceHigh && energyHigh && tempoHigh:
         mood = moods[4];
         break;
-      case !valenceHigh && !energyHigh && !tempoHigh:
+      case (!valenceHigh && energyHigh && !tempoHigh):
         mood = moods[5];
+        break;
+      case (!valenceHigh && !energyHigh && tempoHigh):
+        mood = moods[6];
+        break;
+      case !valenceHigh && !energyHigh && !tempoHigh:
+        mood = moods[7];
         break;
     }
     return mood;
   }
-  // Render the characteristics, if they exist
-  // Display the characteristic name and score
+  // Render the mood algorithm's result
   render() {
     let mood_array = this.moodAlgorithm();
     let mood = mood_array[0];
     let color = mood_array[1];
+    let valence = mood_array[2];
+    let energy = mood_array[3];
+    let tempo = mood_array[4];
     return (
       <div className="mood-container" style={{ backgroundColor: color.color }}>
-        <h3>Mood</h3>
-        <p style={{ marginBottom: "2rem"}}><b>The overall mood of your listening history has been:</b> {mood.mood}</p>
+        <h3 style={{ marginTop: "1rem"}}>Mood</h3>
+        <p style={{ marginBottom: "2rem"}}><b>{mood.mood}</b></p>
+        <p style={{ marginBottom: "2rem"}}>You recent listening history has had {valence.valence} valence, {energy.energy} energy, and {tempo.tempo} tempo</p>
       </div>
     )
   }
