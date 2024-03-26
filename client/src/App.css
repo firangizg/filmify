@@ -151,12 +151,37 @@ html {
   margin-bottom: 6rem;
   text-align: center;
 }
+
 .reason p{
   text-align: center;
   font-size: large;
 }
+
+.react-tooltip-lite {
+  margin-top: 4rem;
+  background: white;
+  color: black;
+}
+
+.react-tooltip-lite-arrow {
+  margin-top: 4rem;
+  border-color: white;
+}
+
 .movie-recommendation{
   width: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  text-align: right;
+
+  /* Remove the next line if you want the span to appear next to the h1 */
+  /*justify-content: space-between;*/
+
+  border-bottom: 1px solid #000;
+  /*padding: 10px 30px;*/
 }
 
 .warning p{
@@ -186,4 +211,6 @@ body, html {
   &:hover {
     background-color: #13943B;
   }
+
+
 }
