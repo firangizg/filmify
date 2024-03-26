@@ -284,13 +284,12 @@ class Movies extends Component {
                                 <p>{item.reason}</p>
                             </div>
                             <br/>
-                            <Tooltip
-                                {/* Adding tooltip so that you can see the release year and movie description when hovering over the movie poster */}
-                                content={"(" + item.release_date.substring(0, 4) +") " + item.overview}
-                                direction="BottomCenter"
-                                target='#tooltip'>
+                            <div className="hover-container">
                                 <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
-                            </Tooltip>
+                                <div className="overlay">
+                                    <div className="hover-text">({item.release_date.substring(0, 4)}) {item.overview}</div>
+                                </div>
+                            </div>
                                 <h4>{item.title}</h4>
                                 <p>{"Rating: " + item.certification}</p>
                         </div>
