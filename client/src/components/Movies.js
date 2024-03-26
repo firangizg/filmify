@@ -285,6 +285,7 @@ class Movies extends Component {
                             </div>
                             <br/>
                             <Tooltip
+                                {/* Adding tooltip so that you can see the release year and movie description when hovering over the movie poster */}
                                 content={"(" + item.release_date.substring(0, 4) +") " + item.overview}
                                 direction="BottomCenter"
                                 target='#tooltip'>
@@ -295,6 +296,7 @@ class Movies extends Component {
                         </div>
                     ))}
                 </div>
+                {/* Adding warning to prevent underage users from watching rated R movies */}
                 <div className="warning">
                     <p>Users under the age of 17 should only watch rated R movies with parental permission.</p>
                 </div>
