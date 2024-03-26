@@ -285,7 +285,8 @@ class Movies extends Component {
                             </div>
                             <br/>
                             <Tooltip
-                                content={item.overview}
+                                content={"(" + item.release_date.substring(0, 4) +") " + item.overview}
+                                // content={item.overview}
                                 direction="BottomCenter"
                                 target='#tooltip'>
                                 <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
