@@ -1,6 +1,7 @@
 // This file contains the code for the Recommendations component.
 import React, { Component } from 'react';
 import '../App.css';
+import Tooltip from 'react-tooltip-lite';
 
 //Component for displaying the movies recommended
 class Movies extends Component {
@@ -270,7 +271,11 @@ class Movies extends Component {
         const movies = this.state.movies;
         return (
             <div id="Recommendations">
-                <h2>Recommendations</h2>
+                <header>
+                    <h2>Recommendations</h2>
+                    {/*<p><i> &emsp; &emsp; Hover over the poster for the synopsis of the movie.</i></p>*/}
+                    <br/>
+                </header>
                 <div className="movie-recommendation-container">
                     {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
@@ -279,12 +284,18 @@ class Movies extends Component {
                                 <p>{item.reason}</p>
                             </div>
                             <br/>
-                            <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
+                            <div className="hover-container">
+                                <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
+                                <div className="overlay">
+                                    <div className="hover-text">({item.release_date.substring(0, 4)}) {item.overview}</div>
+                                </div>
+                            </div>
                                 <h4>{item.title}</h4>
                                 <p>{"Rating: " + item.certification}</p>
                         </div>
                     ))}
                 </div>
+                {/* Adding warning to prevent underage users from watching rated R movies */}
                 <div className="warning">
                     <p>Users under the age of 17 should only watch rated R movies with parental permission.</p>
                 </div>

@@ -151,12 +151,53 @@ html {
   margin-bottom: 6rem;
   text-align: center;
 }
+
 .reason p{
   text-align: center;
   font-size: large;
 }
+
+.hover-container {
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #60bcff;
+}
+
+.hover-container:hover .overlay {
+  opacity: 1;
+}
+
+.hover-text {
+  color: black;
+  font: 1.2rem Tahoma;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 95%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
 .movie-recommendation{
   width: 100%;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  text-align: right;
+  border-bottom: 1px solid #000;
 }
 
 .warning p{
@@ -186,4 +227,6 @@ body, html {
   &:hover {
     background-color: #13943B;
   }
+
+
 }
