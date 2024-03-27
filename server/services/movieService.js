@@ -195,7 +195,7 @@ const movieService = {
     },
     fetchArtistMoviesFromDB: async (art_name) => {
         try {
-            const query = pgp.as.format(`SELECT movies.title, movies.poster_path, movies.certification FROM artistTable, movies WHERE artistTable.id = movies.id AND artist_band = '${art_name}' ORDER BY random() limit 1`);
+            const query = pgp.as.format(`SELECT movies.title, movies.poster_path, movies.overview, movies.release_date, movies.certification FROM artistTable, movies WHERE artistTable.id = movies.id AND artist_band = '${art_name}' ORDER BY random() limit 1`);
             // create a Pool for the database connection and run the query
             const pool = new Pool(credentials);
             const result = await pool.query(query);

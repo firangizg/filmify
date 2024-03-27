@@ -1,7 +1,7 @@
 // This file contains the code for the Recommendations component.
 import React, { Component } from 'react';
 import '../App.css';
-import Tooltip from 'react-tooltip-lite';
+//import Tooltip from 'react-tooltip-lite';
 
 //Component for displaying the movies recommended
 class Movies extends Component {
@@ -287,7 +287,7 @@ class Movies extends Component {
                             <div className="hover-container">
                                 <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
                                 <div className="overlay">
-                                    <div className="hover-text">({item.release_date.substring(0, 4)}) {item.overview}</div>
+                                    <div className="hover-text">({item.release_date?.substring(0, 4)}) {item.overview}</div>
                                 </div>
                             </div>
                                 <h4>{item.title}</h4>
