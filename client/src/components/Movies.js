@@ -230,6 +230,38 @@ class Movies extends Component {
         return artist;
     }
 
+    async generateNewRecommendations() {
+        try {
+            await this.grabChars();  // Refresh characteristics
+            await this.grabArtist(); // Refresh top artist
+            const genre_num = await this.getGenre(); // Get new genre
+            const artist_name = await this.getArtist(); // Get top artist name
+    
+            // Fetch new movies based on the updated genre and artist
+            const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
+            const movie_dataArt = await movie_responseArt.json();
+    
+            const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
+            let movie_data = await movie_response.json();
+    
+            // Add reasoning for each movie in the list
+            movie_data.movies.forEach(movie => {
+                movie.reason = `Because your generated movie genre is ${this.state.genre}`;
+            });
+    
+            // If we have a movie for the top artist, overwrite the first movie in the array and provide a special reason
+            if (movie_dataArt.movies.length !== 0) {
+                movie_data.movies[0] = movie_dataArt.movies[0];
+                movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;
+            }
+    
+            // Update state with new movies
+            this.setState({movies: movie_data.movies, artMovies: movie_dataArt.movies});
+        } catch (error) {
+            console.error("Failed to fetch new recommendations", error);
+        }
+    }
+    
     async componentDidMount() {
         try {
             await this.grabChars();
@@ -266,11 +298,20 @@ class Movies extends Component {
         }
     }
 
+    constructor(props) {
+        super(props);
+        // Bind the new method
+        this.generateNewRecommendations = this.generateNewRecommendations.bind(this);
+    }
+
     render() {
         const movies = this.state.movies;
         return (
             <div id="Recommendations">
-                <h2>Recommendations</h2>
+                <div className="header-container">
+                    <h2>Recommendations</h2>
+                    <button onClick={this.generateNewRecommendations} className="new-recommendations-btn"> Generate New Recommendations</button>
+                </div>
                 <div className="movie-recommendation-container">
                     {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
@@ -280,8 +321,8 @@ class Movies extends Component {
                             </div>
                             <br/>
                             <img className="movie-poster" src={"https://image.tmdb.org/t/p/original" + item.poster_path} alt="movie poster"></img>
-                                <h4>{item.title}</h4>
-                                <p>{"Rating: " + item.certification}</p>
+                            <h4>{item.title}</h4>
+                            <p>{"Rating: " + item.certification}</p>
                         </div>
                     ))}
                 </div>

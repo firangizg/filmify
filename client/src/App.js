@@ -24,7 +24,7 @@ const App = () => {
       link.click();
       document.body.removeChild(link);
     });
-  };
+  }; 
 
   if (hasExpired) {
     return <Expired />;
@@ -35,9 +35,9 @@ const App = () => {
       {accessToken ? (
         <>
           <h1 className="AppTitle">Filmify<img src={logo} alt="logo"></img></h1>
+          <button onClick={handleDownload} className="download-btn">Download Summary</button>
           <Movies />
           <Stats />
-          <button onClick={handleDownload}>Download Summary</button>
         </>
       ) : (
         <>

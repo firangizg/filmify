@@ -108,7 +108,7 @@ async function getArtist(topArtist){
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`
+            Authorization: `Bearer ${process.env.API_KEY}`
         }
     };
     //sets the global variable
@@ -143,7 +143,7 @@ async function getArtistMovies(topArtist_id, globalTop) {
         method: 'GET',
         headers: {
             accept: 'application/json',
-            Authorization: `Bearer ${process.env.ACCESS_TOKEN}`
+            Authorization: `Bearer ${process.env.API_KEY}`
         }
     };
     let artistMovies = [];
