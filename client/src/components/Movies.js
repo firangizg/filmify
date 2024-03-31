@@ -1,7 +1,8 @@
 // This file contains the code for the Recommendations component.
 import React, { Component } from 'react';
 import '../App.css';
-//import Tooltip from 'react-tooltip-lite';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShuffle } from '@fortawesome/free-solid-svg-icons';
 
 //Component for displaying the movies recommended
 class Movies extends Component {
@@ -231,6 +232,45 @@ class Movies extends Component {
         return artist;
     }
 
+    // Function to generate new recommendations
+    async generateNewRecommendations() {
+        try {
+            await this.grabChars();  // Refresh characteristics
+            await this.grabArtist(); // Refresh top artist
+            const genre_num = await this.getGenre(); // Get new genre
+            const artist_name = await this.getArtist(); // Get top artist name
+    
+            // Fetch new movies based on the updated genre and artist
+            const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
+            const movie_dataArt = await movie_responseArt.json();
+    
+            const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
+            let movie_data = await movie_response.json();
+    
+            // Add reasoning for each movie in the list
+            movie_data.movies.forEach(movie => {
+                movie.reason = `Because your generated movie genre is ${this.state.genre}`;
+            });
+    
+            // If we have a movie for the top artist, overwrite the first movie in the array and provide a special reason
+            if (movie_dataArt.movies.length !== 0) {
+                movie_data.movies[0] = movie_dataArt.movies[0];
+                movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;
+            }
+    
+            // Update state with new movies
+            this.setState({movies: movie_data.movies, artMovies: movie_dataArt.movies});
+        } catch (error) {
+            console.error("Failed to fetch new recommendations", error);
+        }
+    }
+
+    constructor(props) {
+        super(props);
+        // Bind the new method
+        this.generateNewRecommendations = this.generateNewRecommendations.bind(this);
+    }
+
     async componentDidMount() {
         try {
             await this.grabChars();
@@ -273,6 +313,7 @@ class Movies extends Component {
             <div id="Recommendations">
                 <header>
                     <h2>Recommendations</h2>
+                    <button onClick={this.generateNewRecommendations} className="new-recommendations-btn"> <FontAwesomeIcon icon={faShuffle} /> New Recommendations</button>
                     {/*<p><i> &emsp; &emsp; Hover over the poster for the synopsis of the movie.</i></p>*/}
                     <br/>
                 </header>

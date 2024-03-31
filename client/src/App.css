@@ -82,6 +82,7 @@ html {
 .stats-container {
   display: flex;
   flex-direction: column;
+  background-color: var(--off-black);
 }
 .list-stats-container {
   display: flex;
@@ -150,6 +151,17 @@ html {
   gap: 3rem;
   margin-bottom: 6rem;
   text-align: center;
+}
+
+.new-recommendations-btn {
+  margin-left: auto;
+  background-color: #0078ff; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none;
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 1em; 
 }
 
 .reason p{
@@ -227,6 +239,15 @@ body, html {
   &:hover {
     background-color: #13943B;
   }
+}
 
-
+.download-btn {
+  margin-right: auto;
+  background-color: #0078ff; 
+  color: white; 
+  padding: 10px 20px; 
+  border: none;
+  border-radius: 5px; 
+  cursor: pointer; 
+  font-size: 1em;
 }
