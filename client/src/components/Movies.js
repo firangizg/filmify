@@ -359,8 +359,8 @@ class Movies extends Component {
             await this.getGenre(); // Get new genre
             const genre_ids = this.state.genre_ids;
             const genres = this.state.genres;
-            // const artist_name = await this.getArtist(); // Get top artist name
-            const artist_name = "Ed Sheeran";
+            const artist_name = await this.getArtist(); // Get top artist name
+            // const artist_name = "Paul McCartney";
 
             // Fetch new movies based on the updated genre and artist
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
