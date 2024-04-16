@@ -12,8 +12,18 @@ class Movies extends Component {
         movies: [],
         artMovies: [],
         art_name: "",
-        genre_id: 0,
+        // genre_id_1: 0,
+        // genre_1: "",
+        // genre_id_2: 0,
+        // genre_2: "",
+        // genre_id_3: 0,
+        // genre_3: "",
+        // genre_id_4: 0,
+        // genre_4: "",
         genre: "",
+        genre_id: "",
+        genres: [],
+        genre_ids: [],
     };
 
     //function for getting the average track characteristics from spotify
@@ -173,20 +183,68 @@ class Movies extends Component {
         //grab any duplicate genres
         let duplicates = genres.filter((item, index) => genres.indexOf(item) !== index);
 
-        let final_genre;
+        let final_genre_1;
+        let final_genre_2;
+        let final_genre_3;
+        let final_genre_4;
+        let final_genres = [];
 
         //if we have duplicates, pick a random one to be the final genre
         if (duplicates.length !== 0) {
-            final_genre = duplicates[Math.floor(Math.random() * duplicates.length)];
+            final_genre_3 = duplicates[Math.floor(Math.random() * duplicates.length)];
+            final_genre_4 = duplicates[Math.floor(Math.random() * duplicates.length)];
+            // final_genres.push(final_genre_3);
+            // final_genres.push(final_genre_4);
         } else { //otherwise, just pick a random generated genre
-            final_genre = genres[Math.floor(Math.random() * genres.length)];
+            final_genre_3 = genres[Math.floor(Math.random() * genres.length)];
+            final_genre_4 = genres[Math.floor(Math.random() * duplicates.length)];
+            // final_genres.push(final_genre_3);
+            // final_genres.push(final_genre_4);
         }
 
-        this.setState({genre: final_genre});
+        final_genre_1 = genres[Math.floor(Math.random() * genres.length)];
+        final_genre_2 = genres[Math.floor(Math.random() * genres.length)];
 
-        let genre_id;
+        final_genres.push(final_genre_1);
+        final_genres.push(final_genre_2);
+        final_genres.push(final_genre_3);
+        final_genres.push(final_genre_4);
+        console.log(final_genres);
+
+        // this.setState({genre_1: final_genre_1});
+        // this.setState({genre_2: final_genre_2});
+        // this.setState({genre_3: final_genre_3});
+        // this.setState({genre_4: final_genre_4});
+        this.setState({genres: final_genres});
 
         //assigning the final genre to its genre id so we can query the database
+        let genre_id_1 = this.setGenreID(final_genre_1);
+        let genre_id_2 = this.setGenreID(final_genre_2);
+        let genre_id_3 = this.setGenreID(final_genre_3);
+        let genre_id_4 = this.setGenreID(final_genre_4);
+
+        // console.log(genre_id);
+
+        let genre_ids = [];
+
+        genre_ids.push(genre_id_1);
+        genre_ids.push(genre_id_2);
+        genre_ids.push(genre_id_3);
+        genre_ids.push(genre_id_4);
+
+        console.log(genre_ids);
+        this.setState({genre_ids: genre_ids});
+
+        // this.setState({genre_id_1: genre_id_1});
+        // this.setState({genre_id_2: genre_id_2});
+        // this.setState({genre_id_3: genre_id_3});
+        // this.setState({genre_id_4: genre_id_4});
+
+        return genre_ids;
+    }
+
+    setGenreID(final_genre) {
+        let genre_id;
         if (final_genre === "Action") {
             genre_id = 28;
         } else if (final_genre === "Adventure") {
@@ -219,10 +277,7 @@ class Movies extends Component {
             genre_id = 53;
         } else if (final_genre === "War") {
             genre_id = 10752;
-
         }
-        console.log(genre_id);
-        this.setState({genre_id: genre_id});
         return genre_id;
     }
 
@@ -237,29 +292,53 @@ class Movies extends Component {
         try {
             await this.grabChars();  // Refresh characteristics
             await this.grabArtist(); // Refresh top artist
-            const genre_num = await this.getGenre(); // Get new genre
+            await this.getGenre().then(); // Get new genre
+            const genre_ids = this.state.genre_ids;
+            const genres = this.state.genres;
             const artist_name = await this.getArtist(); // Get top artist name
     
             // Fetch new movies based on the updated genre and artist
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
             const movie_dataArt = await movie_responseArt.json();
-    
-            const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
-            let movie_data = await movie_response.json();
+
+            let movie_array = [];
+
+            let genre_1 = genre_ids[0];
+            // genre_1 = JSON.stringify(genre_1);
+            console.log(genre_1);
+            const movie_response_1 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_1}`);
+            let movie_data_1 = await movie_response_1.json();
+            movie_array.push(movie_data_1);
+            console.log(movie_array);
+
+            let genre_2 = genre_ids[1];
+            const movie_response_2 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_2}`);
+            let movie_data_2 = await movie_response_2.json();
+            movie_array.push(movie_data_2);
+
+            let genre_3 = genres[2];
+            const movie_response_3 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_3}`);
+            let movie_data_3 = await movie_response_3.json();
+            movie_array.push(movie_data_3);
+
+            let genre_4 = genres[3];
+            const movie_response_4 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_4}`);
+            let movie_data_4 = await movie_response_4.json();
+            movie_array.push(movie_data_4);
     
             // Add reasoning for each movie in the list
-            movie_data.movies.forEach(movie => {
+            movie_array.movies.forEach(movie => {
                 movie.reason = `Because your generated movie genre is ${this.state.genre}`;
             });
     
             // If we have a movie for the top artist, overwrite the first movie in the array and provide a special reason
             if (movie_dataArt.movies.length !== 0) {
-                movie_data.movies[0] = movie_dataArt.movies[0];
-                movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;
+                movie_array.movies[0] = movie_dataArt.movies[0];
+                movie_array.movies[0].reason = `Because your Top Artist is ${artist_name}`;
             }
     
             // Update state with new movies
-            this.setState({movies: movie_data.movies, artMovies: movie_dataArt.movies});
+            this.setState({movies: movie_array.movies, artMovies: movie_dataArt.movies});
         } catch (error) {
             console.error("Failed to fetch new recommendations", error);
         }
@@ -273,39 +352,83 @@ class Movies extends Component {
 
     async componentDidMount() {
         try {
-            await this.grabChars();
-            await this.grabArtist();
-            const genre_num = await this.getGenre();
-            const artist_name = await this.getArtist();
+            await this.grabChars();  // Refresh characteristics
+            await this.grabArtist(); // Refresh top artist
+            await this.getGenre(); // Get new genre
+            const genre_ids = this.state.genre_ids;
+            const genres = this.state.genres;
+            // const artist_name = await this.getArtist(); // Get top artist name
+            const artist_name = "Ed Sheeran";
 
-            //grab top artist movie from database
+            // Fetch new movies based on the updated genre and artist
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
             const movie_dataArt = await movie_responseArt.json();
+            console.log("artist");
+            console.log(movie_dataArt);
 
-            //grab rest of the movies from database with the generated genre
-            const movie_response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_num}`);
-            let movie_data = await movie_response.json();
+            let movie_array = [];
 
-            //add reasoning to recommendation for each movie
-            movie_data.movies.map((item, index) => {
-                item.reason = `Because your generated movie genre is ${this.state.genre}`
-            });
+            let genre_1 = genre_ids[0];
+            console.log(genre_1);
+            const movie_response_1 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_1}`);
+            let movie_data_1 = await movie_response_1.json();
+            console.log(movie_data_1);
+            movie_data_1.movies[0].reason = `Because your generated movie genre is ${genres[0]}`;
+            movie_array.push(movie_data_1.movies[0]);
+            console.log(movie_array);
+            // movie_data_1.reason = `Because your generated movie genre is ${genres[0]}`;
 
-           //if we have a movie for the top artist, overwrite the first movie in the array
-            if(movie_dataArt.movies.length !== 0) {
-                movie_data.movies[0] = movie_dataArt.movies[0];
-                movie_data.movies[0].reason = `Because your Top Artist is ${artist_name}`;
+            let genre_2 = genre_ids[1];
+            const movie_response_2 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_2}`);
+            let movie_data_2 = await movie_response_2.json();
+            movie_data_2.movies[0].reason = `Because your generated movie genre is ${genres[1]}`;
+            movie_array.push(movie_data_2.movies[0]);
+            // movie_data_2.reason = `Because your generated movie genre is ${genres[1]}`;
+
+
+            let genre_3 = genre_ids[2];
+            const movie_response_3 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_3}`);
+            let movie_data_3 = await movie_response_3.json();
+            movie_data_3.movies[0].reason = `Because your generated movie genre is ${genres[2]}`;
+            movie_array.push(movie_data_3.movies[0]);
+            // movie_data_3.reason = `Because your generated movie genre is ${genres[2]}`;
+
+
+            let genre_4 = genre_ids[3];
+            const movie_response_4 = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-movies-from-db?genre_id=${genre_4}`);
+            let movie_data_4 = await movie_response_4.json();
+            movie_data_4.movies[0].reason = `Because your generated movie genre is ${genres[3]}`;
+            movie_array.push(movie_data_4.movies[0]);
+            // movie_data_4.reason = `Because your generated movie genre is ${genres[3]}`;
+
+
+
+            // let i=0;
+            // Add reasoning for each movie in the list
+            // movie_array.movies.forEach(movie => {
+            //     movie.reason = `Because your generated movie genre is ${genres[i]}`;
+            //     i= i+1;
+            // });
+
+            // If we have a movie for the top artist, overwrite the first movie in the array and provide a special reason
+            console.log(movie_dataArt.movies);
+            if (movie_dataArt.movies.length !== 0) {
+                movie_array[0] = movie_dataArt.movies[0];
+                movie_array[0].reason = `Because your Top Artist is ${artist_name}`;
             }
-            this.setState({movies: movie_data.movies});
-            this.setState({artMovies: movie_dataArt.movies});
-            console.log(movie_data.movies);
-            console.log(movie_dataArt.movies[0]);
+
+            // Update state with new movies
+            this.setState({movies: movie_array, artMovies: movie_dataArt});
+            // console.log(movie_array.movies);
         } catch (error) {
-            console.log("failed to fetch artist", error);
-            console.log(this.state.art_name);
-            console.error("Failed to fetch characteristics, genre, and movies", error);
+            console.error("Failed to fetch new recommendations", error);
         }
     }
+
+    // async getMovies(){
+    //     const movies = this.state.movies;
+    //     return movies;
+    // }
 
     render() {
         const movies = this.state.movies;
@@ -320,6 +443,7 @@ class Movies extends Component {
                 <div className="movie-recommendation-container">
                     {/*For every sample movie display its poster, title, and reasoning*/}
                     {movies?.map((item, index) => (
+                        // <p>poop</p>
                         <div className="movie-recommendation" key={index}>
                             <div className="reason">
                                 <p>{item.reason}</p>
