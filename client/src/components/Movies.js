@@ -12,14 +12,6 @@ class Movies extends Component {
         movies: [],
         artMovies: [],
         art_name: "",
-        // genre_id_1: 0,
-        // genre_1: "",
-        // genre_id_2: 0,
-        // genre_2: "",
-        // genre_id_3: 0,
-        // genre_3: "",
-        // genre_id_4: 0,
-        // genre_4: "",
         genre: "",
         genre_id: "",
         genres: [],
@@ -287,6 +279,7 @@ class Movies extends Component {
             const genre_ids = this.state.genre_ids;
             const genres = this.state.genres;
             const artist_name = await this.getArtist(); // Get top artist name
+            // const artist_name = "Paul McCartney";
 
             // Fetch new movie based on the updated artist
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
@@ -355,8 +348,8 @@ class Movies extends Component {
             await this.getGenre(); // Get new genre
             const genre_ids = this.state.genre_ids;
             const genres = this.state.genres;
-            // const artist_name = await this.getArtist(); // Get top artist name
-            const artist_name = "Paul McCartney";
+            const artist_name = await this.getArtist(); // Get top artist name
+            // const artist_name = "Paul McCartney";
 
             // Fetch movie based on the top artist
             const movie_responseArt = await fetch(`${process.env.REACT_APP_API_BASE_URL}/fetch-artist-movies-from-db?artist_band=${artist_name}`);
