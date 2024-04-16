@@ -105,12 +105,28 @@ class Characteristics extends Component {
     let valence = mood_array[2];
     let energy = mood_array[3];
     let tempo = mood_array[4];
+    let creatorsVibe;
+    if(mood.mood == "Happy"){
+      creatorsVibe = 0;
+    }else if(mood.mood == "Calm"){
+      creatorsVibe=0;
+    }else if(mood.mood == "Energetic"){
+      creatorsVibe=0;
+    }else if(mood.mood == "Angry"){
+      creatorsVibe=2;
+    }else if(mood.mood == "Anxious"){
+      creatorsVibe=1;
+    }else if(mood.mood == "Depressed"){
+      creatorsVibe=2;
+    }
     return (
-      <div className="mood-container" style={{ backgroundColor: color.color }}>
-        <h3 style={{ marginTop: "1rem"}}>Mood</h3>
-        <p style={{ marginBottom: "2rem"}}><b>{mood.mood}</b></p>
-        <p style={{ marginBottom: "2rem"}}>You recent listening history has had {valence.valence} valence, {energy.energy} energy, and {tempo.tempo} tempo</p>
-      </div>
+        <div className="mood-container" style={{backgroundColor: color.color}}>
+          <h3 style={{marginTop: "1rem"}}>Mood</h3>
+          <p style={{marginBottom: "2rem"}}><b>{mood.mood}</b></p>
+          <p style={{marginBottom: "2rem"}}>You recent listening history has
+            had {valence.valence} valence, {energy.energy} energy, and {tempo.tempo} tempo<b></b></p>
+          <p style={{marginBottom: "2rem"}}>How does your recent listening match the creators of this application? Your listening matches {creatorsVibe} creators.</p>
+        </div>
     )
   }
 }
